@@ -1,0 +1,13 @@
+.outerContainer {
+  margin: 0 auto 1% auto;
+  padding: 2%;
+  border-radius: 8px;
+  /* background-color: white; */
+  /* width: 50%; */
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  max-height: 95vh;
+  /* overflow-y: scroll; */
+  /* box-shadow: 0 2px 7px darkgrey, 2px 2px 4px lightgray; */
+}

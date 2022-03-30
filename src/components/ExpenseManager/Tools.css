@@ -1,0 +1,31 @@
+.but {
+  padding: 3% !important;
+  display: flex;
+  align-items: center;
+  flex: 0.25;
+  justify-content: center;
+}
+.popup {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  backdrop-filter: blur(2px);
+  height: 100vmax;
+  width: 100%;
+  z-index: 50;
+}
+.removeOutline {
+  width: fit-content !important;
+  outline: none;
+  border: none;
+}
+hr {
+  background-color: lightgray;
+  margin: 1.5% 0;
+  border: none;
+  /* box-shadow: 0 1px 2px gray, 0 0 3px white; */
+}
+.hidden {
+  width: 0px;
+  height: 0px;
+}

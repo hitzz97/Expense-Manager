@@ -1,0 +1,15 @@
+.scroll {
+  /* height: 50vh; */
+  overflow-y: scroll;
+}
+.scroll::-webkit-scrollbar {
+  width: 0.1rem;
+}
+
+/* .MuiListItemButton-root:nth-child(odd) {
+  background-color: rgb(197, 197, 197);
+} */
+/* .Mui-selected {
+  border: 1px solid purple;
+  background-color: rgb(209, 160, 255);
+} */
