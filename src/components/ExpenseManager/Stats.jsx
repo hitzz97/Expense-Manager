@@ -1,58 +1,75 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
-import { Edit } from "@mui/icons-material";
+import { Box, Button, ButtonGroup, FormLabel, TextField, Typography } from "@mui/material";
+import { AccountBalance, AccountBalanceWallet, AccountBalanceWalletRounded, Cancel, Done, Edit } from "@mui/icons-material";
 import "./Stats.css"
 import { useState } from "react";
 
 export default function Stats(props){
+    const [value, setValue] = useState(props.bal);
     const [edit, setEdit] = useState(false);
     // const inp = useRef(null);
     const handleClick = ()=>{
         setEdit(!edit);
-        // setTimeout(()=>inp.current.focus(), 100);
     }
+    function handleSubmit(e){
+        e.preventDefault()
+        props.setBal(Number(value));
+        handleClick();
+    }
+    
     return (
         <Box sx={style} >
-            <Typography  variant="body2" sx={{color:"#212121"}}>Balance</Typography>
-            <Box className="balance" mx={1} >
-            {edit && <TextField 
-                // ref={inp} 
-                autoFocus
-                variant="standard"
-                type={"number"} 
-                onBlur={()=>setEdit(!edit)} 
-                value={props.bal} 
-                onChange={(e)=>props.setBal(Number(e.target.value))} 
-            />}
-                {
-                    !edit && <Typography sx={{px:1}} variant="h4">{props.bal}</Typography> 
+            <Box className='styleMe'/>
+            <FormLabel>
+            <Typography  variant="body2" sx={{fontWeight:500}}>Balance</Typography>
+            </FormLabel>
+            <form  onSubmit={handleSubmit}>
+            <Box sx={{display:"flex", flexDirection:"Row"}} mx={1} >
+                <AccountBalanceWalletRounded sx={{alignSelf:"center", mr:0.5, mb:0.1}}/>
+                {edit && 
+                <>
+                    <TextField 
+                        // ref={inp} 
+                        sx={{p:0.6}}
+                        autoFocus
+                        variant="standard"
+                        type={"number"} 
+                        // onBlur={()=>setEdit(!edit)} 
+                        defaultValue={value=='0'?"":value} 
+                        onChange={(e)=>setValue(Number(e.target.value))} 
+                    />
+                    <ButtonGroup size="small" variant="text" sx={{p:0, m:0, boxShadow:"0 0 5px white"}}>
+                        <Button type="submit" size="small" > <Done color="success"/> </Button>
+                        <Button onClick={handleClick} size="small"> <Cancel color="error" /> </Button>
+                    </ButtonGroup>
+                </>
                 }
-                <Button sx={{p:0, m:0}} onClick={handleClick}>
-                    <Box display='flex' flexDirection="column" alignItems={'center'}>
-                        <Edit/>
-                        Edit
+                {
+                    !edit && 
+                    <>
+                    <Typography sx={{alignSelf:"center"}}  variant="h4" onClick={handleClick} color="#4a148c" fontWeight={600}>{props.bal}</Typography> 
+                    <Box sx={{ml:2, mt:0.5,display:'flex',alignItems:"center", alignSelf:"flex-start"}} onClick={handleClick}> 
+                        <Edit color="primary" fontSize="small"/>
+                        <Typography variant="caption" color='primary'>EDIT</Typography>
                     </Box>
-                </Button>
+                    </>
+                }
             </Box>
+            </form>
+
             <div className="spacer"/>
+                <FormLabel>
 
-            <Typography variant="body2" sx={{color:"#212121"}}>This month</Typography>
+            <Typography variant="body2" sx={{fontWeight:500}}>This month</Typography>
+                </FormLabel>
 
-            {/* <Box className="balance" mx={1}>
-                <Typography variant="subtitle2" >Credit</Typography>
-                <Typography variant="subtitle2" >{props.credit}</Typography>
-            </Box>
-            <Box className="balance" mx={1} >
-                <Typography variant="subtitle2">Debit</Typography>
-                <Typography variant="subtitle2">{props.debit}</Typography>
-            </Box> */}
             <Box sx={{display:'flex'}} className="balance">
             <Box mx={1} sx={{display:'flex', flexDirection:"column", alignItems:'center', px:2}}>
-                <Typography variant="subtitle1" fontWeight={500}>{props.credit}</Typography>
-                <Typography variant="subtitle1" fontWeight={500}>Credit</Typography>
+                <Typography variant="h6" color="#6a1b9a" fontWeight={600}>{props.credit}</Typography>
+                <Typography variant="body1" fontWeight={500}>Credit</Typography>
             </Box>
             <Box mx={1} sx={{display:'flex', flexDirection:"column", alignItems:'center', px:2, color:"error"}}>
-                <Typography variant="subtitle1" fontWeight={500}>{props.debit}</Typography>
-                <Typography variant="subtitle1" fontWeight={500}>Debit</Typography>
+                <Typography variant="h6" color="#6a1b9a" fontWeight={600}>{props.debit}</Typography>
+                <Typography variant="body1" fontWeight={500}>Debit</Typography>
             </Box>
             </Box>
 
@@ -62,8 +79,12 @@ export default function Stats(props){
  
 const style={
     borderRadius:'8px',
-    boxShadow:"0px 2px 5px lightgrey",
+    // boxShadow:"0px 2px 5px lightgrey",
+    // boxShadow: "rgba(0, 0, 0, 0.2) 0px 4px 12px",
+    // boxShadow: "rgba(149, 157, 165, 0.3) 0px 8px 24px",
+    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
     p:2,
-    flexShrink:'0',
+    position:'relative',
+    // flexShrink:'0',
     backgroundColor:"white",
 }

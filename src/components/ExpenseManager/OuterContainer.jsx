@@ -4,7 +4,6 @@ import Tools from "./Tools"
 import Stats from "./Stats";
 import Transactions from "./Transactions"
 import { createTheme } from "@mui/material";
-import { green, red } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 
 
@@ -29,12 +28,12 @@ const theme=createTheme({
             styleOverrides:{
                 root:{
                     //the pseudo class ":nth-child" is potentially unsafe when doing server-side rendering. Try changing it to ":nth-of-type".
-                    "&:nth-child(odd)":{
-                        backgroundColor:"rgb(197, 197, 197)",
-                    },
-                    "&.Mui-selected":{
-                        color:'#757ce8',
-                    }
+                    // "&:nth-of-type(2n+1)":{
+                    //     backgroundColor:"rgb(197, 197, 197)",
+                    // },
+                    // "&.Mui-selected":{
+                    //     color:'#757ce8',
+                    // }
                 }
             }
         }
@@ -55,10 +54,16 @@ export default function OuterContainer(props){
     const [sort, setSort] = useState("latest");
     const [credit,setCredit] = useState(0);
     const [debit, setDebit] = useState(0);
-    const [selectedTrans, setSelectedTrans]=useState([]);
-
-    function addTrans(date, amt, type, notes){
-        let ctime =new Date().getTime();
+    const [group, setGroup] = useState({
+        dmy:"none",
+        label:"none",
+    });
+    function addTrans(date, amt, type, notes, ctime){
+        if(ctime){
+            console.log("removing")
+            removeTrans(ctime);
+        }
+        ctime = ctime?ctime:new Date().getTime();
         let obj = {
             date:date, 
             amt:amt, 
@@ -70,36 +75,65 @@ export default function OuterContainer(props){
             let newObj = {...curr, [ctime]:obj};
             return newObj
         });
-        if(type==='credit'){
-            setiBal(Number(iBal)+Number(amt));
-        }else{
-            setiBal(Number(iBal)-Number(amt));
+
+        let dt = obj.date;
+        let tc=0, td=0, m=new Date().getMonth();
+        if(obj.type==='credit')
+            tc+=Number(obj.amt);
+        else
+            td-=Number(obj.amt);
+        console.log(tc, td);
+        if(new Date(dt).getMonth() === m){
+            setCredit(credit+tc);
+            setDebit(debit-td);
         }
+        setiBal(curr=>curr+tc+td);
     }
 
-    function removeTrans(){
+    function removeTrans(ctime){
+        let obj = trans[ctime];
+        let dt = obj.date;
+        let tc=0, td=0, m=new Date().getMonth();
+
+        if(obj.type==='credit')
+            tc+=Number(obj.amt);
+        else
+            td-=Number(obj.amt);
+        if(new Date(dt).getMonth() === m){
+            setCredit(credit-tc);
+            setDebit(debit+td);
+        }
+        setiBal(curr=>curr-tc-td);
         setTrans((curr)=>{
-            let allT = curr.filter((e)=>(!(selectedTrans.find(e.ctime)===undefined)));
+            let allT = {...curr}
+            delete(allT[ctime])
             return allT;
         })
     }
 
     useEffect(()=>{
         // adjust credit, debit
+        console.log("recalculating cr, dr" );
         let m = new Date().getMonth();
-        let c = 0,d=0;
+        let c = 0,d=0,b=0;
         for (let key in trans){
             let dt = trans[key].date;
-            if(new Date(dt).getMonth() === m){
-                if(trans[key].type==='credit')
-                    c+=Number(trans[key].amt);
+            let tc=0, td=0;
+            if(trans[key].type==='credit')
+                    tc+=Number(trans[key].amt);
                 else
-                    d-=Number(trans[key].amt);
+                    td-=Number(trans[key].amt);
+            if(new Date(dt).getMonth() === m){
+                c+=tc;
+                d-=td;
             }
+            b+=(tc+td);
+            console.log(new Date(dt).getMonth(),m)
         }
         setCredit(c);
         setDebit(d);
-    },[trans])
+        setiBal(b);
+    },[])
 
     return (
         <ThemeProvider theme={theme}>
@@ -110,17 +144,20 @@ export default function OuterContainer(props){
             debit={debit}
             />
             <Tools 
-            addTrans={addTrans} removeTrans={removeTrans}
+            addTrans={addTrans}
             filters={filters} setFilters={setFilters}
             sort={sort} setSort={setSort}
             addTransaction={addTrans}
+            group={group} setGroup={setGroup}
             />
             <Transactions 
             transactions={trans}
             sortby={sort}
             filterby={filters}
-            selectedTrans={selectedTrans} setSelectedTrans={setSelectedTrans}
-            />
+            group={group}
+            removeTrans={removeTrans}
+            addTransaction={addTrans}
+        />
         </Box>
          </ThemeProvider>
     )

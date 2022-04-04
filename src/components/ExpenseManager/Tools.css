@@ -15,7 +15,7 @@
   z-index: 50;
 }
 .removeOutline {
-  width: fit-content !important;
+  /* width: fit-content !important; */
   outline: none;
   border: none;
 }
@@ -28,4 +28,10 @@ hr {
 .hidden {
   width: 0px;
   height: 0px;
+}
+.inpdate::-webkit-inner-spin-button {
+  display: none;
+}
+.inpdate::-webkit-outer-spin-button {
+  display: none;
 }

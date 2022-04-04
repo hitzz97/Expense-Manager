@@ -1,27 +1,45 @@
-import { Box, ListItem, ListItemButton, Typography } from "@mui/material";
+import { Box, ListItem, ListItemButton, Typography, Button, TextField, ClickAwayListener, Fab, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import "./Transactions.css"
 import { useEffect, useState } from "react";
-import { TransitionGroup } from "react-transition-group";
-import { CheckBox } from "@mui/icons-material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { CheckBoxOutlineBlank, Delete, Edit, ExpandMore } from "@mui/icons-material";
+import AddPopup from "./Popup/AddPopup";
+import styled from "@emotion/styled";
+
+const StyledLIB = styled(ListItemButton)(({ theme }) => ({
+    // width: 300,
+    // color: theme.palette.success.main,
+      '&.Mui-selected': {
+        //   transform:"scale(1.001,1.01)",
+        // zIndex:,
+        boxShadow: `0 1px 10px darkgrey, 0px 1px 7px grey, 0 0 5px lightgrey,0 0 10px white `,
+        transition: 'box-shadow 0.5s ease-in-out',
+      },
+    // },
+    // "&:nth-of-type(2n+1)":{
+    //     backgroundColor:"rgb(197, 197, 197)",
+    // },
+  }));
+  
+
+
 const Tstyle={
     display:"flex",
     flexDirection:"row",
     justifyContent:"space-between",
     alignItems:"center",
-    mt:0.5,
+    // mt:0.5,
     width:"100%",
     // borderBottom:"1px solid grey",
     // borderColor:"#fff"
 }
 const Transaction = (props) => {
-    const [selected, setSelected] = useState(false);
-    function handleClick(){
-        setSelected(!selected);
-        props.handleSelect(props.k);
-    }
+    const [edit,setEdit] = useState(false);
+    function toggleEdit(){setEdit(!edit);}
     return (
-        <ListItemButton selected={selected} divider onClick={handleClick} >
-            {selected && <CheckBox fontSize="small" sx={{mr:1}} /> }
+        <Accordion disableGutters sx={{p:0, m:0, ...shadow}}>
+        <AccordionSummary expandIcon={<ExpandMore />} sx={{px:0.8}}>
+        {/* <StyledLIB selected={selected} sx={{zIndex:(props.group?2:1)}} className={props.colored?"colored":""} divider onClick={toggleSelect}> */}
             <Box sx={Tstyle} >
                 <Typography  variant="subtitle2">{props.date}</Typography>
                 <Box display='flex'>
@@ -30,19 +48,71 @@ const Transaction = (props) => {
                     <Typography variant="subtitle2">{props.amt}</Typography> 
                 </Box>
             </Box>
-        </ListItemButton>
+        {/* </StyledLIB> */}
+        </AccordionSummary>
+        <AccordionDetails sx={{px:0.8}}>
+        {
+            (!props.group) &&
+            <Box sx={Tstyle}>
+                <Button size="small">
+                    <Box onClick={props.removeTrans} color='error' display='flex' flexDirection='column' alignItems='center'>
+                        <DeleteIcon color="error"/>
+                        Delete
+                    </Box>
+                </Button> 
+                <TextField size="small" sx={{border:0, textAlign:'center'}} defaultValue={props.notes} multiline maxRows={3} disabled variant="standard" />
+                <Button size="small" onClick={toggleEdit}>
+                    <Box  display='flex' flexDirection='column' alignItems='center'>
+                        <Edit/>
+                        Edit
+                    </Box>
+                </Button>
+                {
+                edit && 
+                <AddPopup 
+                open={edit} 
+                setOpen={setEdit} 
+                addTransaction={props.addTransaction}
+                edit={{amt:props.amt, notes:props.notes, type:props.type, date:props.date, ctime:props.ctime}}
+                />
+                }
+            </Box>
+        }
+        {
+            (props.group) && 
+            <Box sx={{mx:0.3}}>
+                {
+                    props.objs.map((e)=>{
+                        return (
+                            <Transaction {...props} {...e} key={e.ctime} group={undefined}/>
+                        )
+                    })
+                }
+            </Box>
+        }
+        </AccordionDetails>
+        </Accordion>
     )
 }
 
 
 export default function Transactions(props){
     const [visibleTrans, setVisibleTrans] = useState([])
+    // const [selected, setSelected] = useState("");
+    // function handleClick(ctime){
+    //     // console.log("clicked", ctime, selected)
+    //     if(selected === ctime)
+    //         setSelected("");
+    //     else
+    //         setSelected(ctime);
+    // }
     useEffect(()=>{
-        console.log("running effect")
+        console.log("running effect to reOrder transactions.", props.transactions)
         let {credits,debits, minAmt, maxAmt,startDate,endDate} = props.filterby;
-        console.log(credits,debits, minAmt, maxAmt,startDate,endDate);
+        // console.log(credits,debits, minAmt, maxAmt,startDate,endDate);
         let arr=[];
 
+        //filter
         for(let k in props.transactions){
             let obj = props.transactions[k];
             let {ctime,date,amt,type,notes} = obj;
@@ -55,8 +125,76 @@ export default function Transactions(props){
                 (new Date(date))<=(new Date(endDate)) &&
                 ((type==='credit' && credits) || (type==='debit' && debits))
             )
-                arr.push(obj)
+                arr.push(obj);
         }
+        if(arr.length===0){
+            setVisibleTrans(arr);
+            return ;
+        }
+        //group
+        if(props.group.dmy!=="none"){
+            // if (!(props.sortby==='latest' || props.sortby==='oldest')){
+            arr.sort((a,b)=>(new Date(b.date) - new Date(a.date)));
+            // }
+            let narr=[];
+            // console.log(new Date().getTime())
+            let grp = {
+                date:arr[0].date,
+                amt:Number(arr[0].amt),
+                objs:[arr[0], ],
+                ctime:arr[0].date,
+                type:arr[0].type,
+            }
+            for(let i=1; i<arr.length; i++){
+                let flag=false;
+                switch(props.group.dmy){
+                    case 'day':{
+                        if(grp.date === arr[i].date)
+                            flag=true;
+                        break;
+                    }
+                    case 'month':{
+                        if(grp.date.slice(0,7) === arr[i].date.slice(0,7))
+                            flag=true;
+                        break;
+                    }
+                    case 'year':{
+                        if(grp.date.slice(0,4) === arr[i].date.slice(0,4))
+                            flag=true;
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                if(flag){
+                    grp.amt += (Number(arr[i].amt)*(arr[i].type==='credit'?1:-1));
+                    grp.objs.push(arr[i]);
+                    if(grp.amt>0)
+                        grp.type='credit';
+                    else
+                        grp.type='debit';
+                }
+                else{
+                    if(props.group.dmy==='month')grp.date=grp.date.slice(0,7);
+                    if(props.group.dmy==='year')grp.date= grp.date.slice(0,4);
+                    narr.push({...grp, amt:Math.abs(grp.amt)})
+                    // console.log(new Date().getTime())
+                    grp = {
+                        date:arr[i].date,
+                        amt:Number(arr[i].amt),
+                        objs:[arr[i], ],
+                        ctime:arr[i].date,
+                        type:arr[i].type,
+                    }
+                }
+            }
+            if(props.group.dmy==='month')grp.date=grp.date.slice(0,7);
+            if(props.group.dmy==='year')grp.date= grp.date.slice(0,4);
+            narr.push({...grp, amt:Math.abs(grp.amt)});
+            // console.log("GROUPED", narr);
+            arr = narr;
+        }
+        //sort
         arr.sort((a,b)=>{
             switch(props.sortby){
                 case "latest":
@@ -71,48 +209,51 @@ export default function Transactions(props){
                     return new Date(a.date)-new Date(b.date); 
             }
         })
-        console.log(arr);
+        // console.log(arr);
         setVisibleTrans(arr);
 
-    }, [props.sortby, props.filterby, props.transactions])
+    }, [props.sortby, props.filterby, props.transactions, props.group])
 
-    
-    function handleSelect(key){
-        let arr =props.selectedTrans;
-        console.log("find", arr.find(e => e===key))
-        let x = arr.indexOf(key);
-        if (x!==-1){
-            arr.splice(x,1);
-        }else{
-            arr.push(key);
-        }
-        console.log(arr,x)
-        props.setSelectedTrans(arr)
-    }
     return (
         <Box sx={style} className="scroll">
             <Box sx={{...stick}}>
-                <ListItem >
+                {/* <ListItem >
                     <Typography variant="body2">Transactions</Typography>
-                </ListItem>
-                <ListItem divider>
+                </ListItem> */}
+                <ListItem >
                     {/* <Typography  variant="caption">Selected</Typography> */}
-                    <Box sx={{...Tstyle}}>
+                    <Box sx={{...Tstyle, mt:0}}>
                         <Typography  variant="caption">Date</Typography>
                         <Typography  variant="caption">Amount</Typography>
                     </Box>  
                 </ListItem>
             </Box>
-            <Box className="scroll">
+            {/* <ClickAwayListener onClickAway={()=>setSelected("")}> */}
+            <Box className="scroll shadow" >
                 {
-                    visibleTrans.map((e)=>{
+                    visibleTrans.map((e,idx)=>{
                         let {ctime,date,amt,type,notes} = e;
                         return (
-                            <Transaction handleSelect={handleSelect} date={date} amt={amt} key={ctime} k={ctime} type={type} notes={notes} />
+                            <Transaction 
+                            colored={idx%2===0}
+                            removeTrans={()=>props.removeTrans(ctime)}
+                            // onClick={()=>handleClick(ctime)}
+                            date={date} 
+                            amt={amt} 
+                            key={ctime} ctime={ctime} 
+                            type={type} 
+                            notes={notes} 
+                            // selected={ctime===selected}
+                            addTransaction={props.addTransaction}
+                            group={e.objs!==undefined} 
+                            objs={e.objs}
+                            />
                         )
                     })
                 }
             </Box>
+            {/* </ClickAwayListener> */}
+
         </Box>
     )
 }
@@ -122,16 +263,22 @@ const style = {
     // boxShadow:"0px 2px 5px grey",
     // height:"minContent",
     overflowY:"scroll",
-    p:1,
-    pt:0,
+    width:"100%",
+    margin: '0 auto',
+    // pt:0,
 }
 const stick ={
     position:"sticky",
     top:'0px',
     zIndex:10,
-    pt:1,
+    // pt:0.5,
     backgroundColor:"rgb(230, 230, 230)",
 }
 
 
 
+
+const shadow={
+    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
+    // boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
+}

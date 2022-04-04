@@ -1,0 +1,11 @@
+popups and tool tips UI imporovements  
+
+Persistence
+add labels, group by labels, filter by labels
+
+multiple delete, delete all
+cancel edit back button 
+
+add a homepage
+add multiple accounts in home page 
+add frequent transactions in add transaction

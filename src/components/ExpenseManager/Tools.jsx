@@ -1,45 +1,19 @@
-import { Add, CheckBoxOutlineBlank, Remove, Sort } from "@mui/icons-material";
-import { CalendarMonth, CheckBox } from "@mui/icons-material";
+/* eslint-disable no-restricted-globals */
+import { Add, CheckBoxOutlineBlank, GroupWork, Sort } from "@mui/icons-material";
+import {  CheckBox } from "@mui/icons-material";
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import { Box, Typography, FormLabel, SwipeableDrawer,Button, TextField, Chip, Input, IconButton, ButtonGroup} from "@mui/material";
+import { Box, Typography, FormLabel, Button, Input, InputLabel, Grid, FormControl, RadioGroup, FormControlLabel, Radio, ListItem, ListItemButton} from "@mui/material";
 import Switch from '@mui/material/Switch';
-import DateAdapter  from '@mui/lab/AdapterDayjs';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useState } from "react";
-
-import "./Tools.css"
-import { DatePicker } from "@mui/lab";
-
-function Popup(props) {
-    // function handelClick(){
-    //     setTimeout(()=>props.show(false),10);
-    // }
-    const toggleDrawer = (open) => (event) => {
-        if (
-          event &&
-          event.type === 'keydown' &&
-          (event.key === 'Tab' || event.key === 'Shift')
-        ) {
-          return;
-        }
-        props.show(open);
-       
-      };
-    return (
-
-        <SwipeableDrawer
-        anchor={'bottom'}
-        open={props.open}
-        onClose={toggleDrawer(false)}
-        onOpen={toggleDrawer(true)}
-        >
-        {props.children}
-
-        </SwipeableDrawer>
-    )
-}
+import "./Tools.css" 
+import Popup from "./Popup/Popup";
+import AddPopup from "./Popup/AddPopup";
 
 function SortPopup(props){
+    const handleClose= ()=>{
+        props.setOpenSort(false);
+        setTimeout(()=>history.back(), 100);
+    }
     return (
         <Popup open={props.open} show={props.setOpenSort}>
             <Box>
@@ -79,13 +53,20 @@ function SortPopup(props){
                     </Button>   
                 </Box>
             </Box>
+
+            <Button variant="text" color="error" fullWidth onClick={handleClose}>
+                    Close
+                </Button>
             </Box>
         </Popup>
     )
 }
 
 function FilterPopup(props){
-
+    const handleClose= ()=>{
+        props.setOpen(false);
+        setTimeout(()=>history.back(), 100);
+    }
     return (
         <Popup open={props.open} show={props.setOpen}>
             <Box>
@@ -108,47 +89,51 @@ function FilterPopup(props){
                 
                 <br/>
                 <FormLabel >Transaction Range</FormLabel>
-                <Box display={'flex'} justifyContent={'space-between'} mx={1} py={1}>
-                    <Box>
-                        <label htmlFor="minAmt"><Typography component={'div'}>Minimum: </Typography></label>
-                        <input 
+                <Grid container columnGap={4} rowGap={2} mx={1} py={1}>   
+                    <Grid item xs={5}>
+                        <InputLabel htmlFor="minAmt"><Typography>Minimum: </Typography></InputLabel>
+                        <Input 
                             type={'number'} 
                             id="minAmt"
                             value={props.filters.minAmt} 
                             onChange={(e)=>props.setFilters({minAmt:Number(e.target.value)})} 
                             // variant="standard" 
                             className="removeOutline"
-                        />                
-                    </Box>
-                    <Box>
-                        <label htmlFor="maxAmt" ><Typography component={'div'}>Maximum: </Typography></label>
-                        <input 
+                        />
+                    </Grid>           
+                    <Grid item xs={5}>
+                        <InputLabel htmlFor="maxAmt" ><Typography>Maximum: </Typography></InputLabel>
+                        <Input 
                             type={'number'} 
                             id="maxAmt"
                             value={props.filters.maxAmt} 
                             onChange={(e)=>props.setFilters({maxAmt:Number(e.target.value)})} 
                             // variant="standard" 
                             className="removeOutline"
-                            />                
-                    </Box>
-                </Box>
+                            />    
+                    </Grid>            
+                </Grid>
 
                 <br/>
                 <FormLabel >Transaction Date</FormLabel>
-                <Box display={'flex'} justifyContent={'space-between'} mx={1} py={1}>
-                    <Box>
-                        <label htmlFor="start" ><Typography component={'div'}>Start </Typography></label>
-                        <input 
+                <Grid container columnGap={4} rowGap={2} mx={1} py={1}>   
+                    <Grid item xs={11} >
+                        <InputLabel htmlFor="start" ><Typography component={'div'}>Start </Typography></InputLabel>
+                        <Input 
+                        fullWidth
                             id="start"
                             type={'Date'} 
                             value={props.filters.startDate} 
                             onChange={(e)=>props.setFilters({startDate:e.target.value})} 
                             // variant="standard" 
-                            className="removeOutline"
+                            className="removeOutline inpdate"
                         />                
-                    </Box>
-                    <Box>
-                        <label htmlFor="end" ><Typography component={'div'}>End </Typography></label>                        <input 
+                    </Grid>           
+                    <Grid item xs={11}>
+                        <InputLabel htmlFor="end" ><Typography component={'div'}>End </Typography></InputLabel> 
+                        <Input 
+                            fullWidth
+                            sx={{m:0}}
                             type={'Date'} 
                             id="end"
                             value={props.filters.endDate} 
@@ -156,130 +141,130 @@ function FilterPopup(props){
                             // variant="standard" 
                             className="removeOutline"
                             />                
-                    </Box>
-                </Box>
+                    </Grid>            
+                </Grid>
             </Box>
-            
+                <Button variant="text" color="error" fullWidth onClick={handleClose}>
+                    Close
+                </Button>
             </Box>
         </Popup>
     )
 }
 
-function AddPopup(props){
-    const [ttype,setTtype] = useState('credit')
-    const [date,setDate] = useState(new Date())
-    const [amt, setAmt] = useState("")
-    const [notes, setNotes] = useState("")
+function GroupPopup(props){
+    // const [value, setValue] = useState(props.group);
+    const handleClose= ()=>{
+        props.setOpen(false);
+        setTimeout(()=>history.back(), 100);
+    }
+    function handleDMYChange(e){
+        // console.log("group set")
+        props.setGroup({dmy:e});
+    }
+    const RadioProps=(e)=>{
+        return {
+            checked: props.group.dmy === e,
+        }
+    }
 
-    const [bcolor, setbcolor] =useState('success')
-    function handleTypeChange(e){
-        // console.log(e.target)
-        if(e.target.innerHTML === "Dr") { 
-            setTtype("debit")
-            setbcolor("warning")
-        }
-        else {
-            setTtype("credit")
-            setbcolor("success")
-        }
-    }
-    function handleAdd(){
-        props.addTransaction(date.toISOString().split('T')[0], amt, ttype, notes);
-        props.setOpen(false);
-    }
-    function handleCancle(){
-        props.setOpen(false);
-    }
     return (
         <Popup open={props.open} show={props.setOpen}>
             <Box>
-            <Box my={2}  sx={{textAlign:"center"}}>
-            <Typography  variant="body1" >Add Transaction</Typography>
+            <Box mt={1}  sx={{textAlign:"center"}}>
+            <Typography  variant="body1" >GROUP BY</Typography>
+            </Box>
+                {/* month range, */}
+            <Box p={2} pb={0.5}> 
+                {/* <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel> */}
+                <ListItemButton selected={'none'===props.group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} 
+                onClick={()=>handleDMYChange('none')}>
+                    <Box sx={{display:'flex',justifyContent:"space-between", alignItems:"center",width:"100%"}}>
+                        <Typography>None</Typography>
+                        <Radio {...RadioProps('none')}/>
+                    </Box>
+                </ListItemButton>
+                <ListItemButton selected={'day'===props.group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('day')}>
+                    <Box sx={{display:'flex',justifyContent:"space-between", alignItems:"center",width:"100%"}}>
+                        <Typography>Day</Typography>
+                        <Radio {...RadioProps('day')}/>
+                    </Box>
+                </ListItemButton>
+                <ListItemButton selected={'month'===props.group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('month')}>
+                    <Box sx={{display:'flex',justifyContent:"space-between", alignItems:"center",width:"100%"}}>
+                        <Typography>Month</Typography>
+                        <Radio {...RadioProps('month')}/>
+                    </Box>
+                </ListItemButton>
+                <ListItemButton selected={'year'===props.group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('year')}>
+                    <Box sx={{display:'flex',justifyContent:"space-between", alignItems:"center",width:"100%"}}>
+                        <Typography>Year</Typography>
+                        <Radio {...RadioProps('year')}/>
+                    </Box>
+                </ListItemButton>
             </Box>
 
-            <Box px={2} mt={1} mb={3} display="flex" flexDirection="column" justifyContent="space-around" >
-                <Box display="flex" flexDirection="row"  alignItems='center' justifyContent="space-between">
-                    <LocalizationProvider dateAdapter={DateAdapter }>
-                    <DatePicker
-                        label="Date"
-                        value={date}
-                        onChange={(v) => {
-                            // console.log(v);
-                            setDate(v.$d);
-                        }}
-                        disableFuture={true}
-                        disableCloseOnSelect={true}
-                        allowSameDateSelection={true}
-                        renderInput={(params) => {
-                            return (
-                            <Button variant="outlined" size="large" {...params.inputProps}>
-                                <CalendarMonth fontSize="medium"/>
-                            </Button>
-                            )}
-                        }
-                    />
-                    </LocalizationProvider>
-
-                    <TextField sx={{mr:1, ml:0.5}} value={amt} onChange={(e)=>setAmt(e.target.value)} variant="outlined" color={bcolor} label="Amount" size="small" placeholder="Transaction Amount" type="number"/>
-                    
-                    <ButtonGroup variant="text" color={bcolor} size="small">
-                        <Button variant={bcolor==='success'?"outlined":"text"} size="small" color="success" onClick={handleTypeChange}
-                        >
-                            <Typography variant="h6" >Cr</Typography> 
-                        </Button>
-                        <Button variant={bcolor==='warning'?"outlined":"text"} size="small" color="warning" onClick={handleTypeChange} >
-                            <Typography variant="h6" >Dr</Typography>
-                        </Button>
-                    </ButtonGroup>
-                </Box>
-                <Box display='flex' my={2}>
-                    <TextField multiline maxRows={4} sx={{"flex":1}} variant="standard" label="Notes" placeholder="Additional Notes" 
-                    value={notes}
-                    onChange={(e)=>setNotes(e.target.value)}/>
-                </Box>
-            </Box>
-            <ButtonGroup fullWidth variant="text">
-                <Button color="success" onClick={handleAdd}>Add</Button>
-                <Button color="error" onClick={handleCancle}>Cancel</Button>
-            </ButtonGroup>
-
+            <Button sx={shadow} variant="text" color="error" fullWidth onClick={handleClose}>
+                Close
+            </Button>
             </Box>
         </Popup>
     )
 }
-
 
 export default function Tools(props){
     const [openSort, setOpenSort] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
     const [openAdd, setOpenAdd] = useState(false);
+    const [openGroup, setOpenGroup] = useState(false);
     // const [openSort, setOpenSort] = useState(false);
     function handleFiltersChange(change){
         let obj = {...props.filters, ...change}
         console.log(obj)
         props.setFilters(obj);
     }
+    function handleGroupChange(change){
+        let obj = {...props.group, ...change}
+        console.log(obj)
+        props.setGroup(obj);
+    }
     return (
-        <Box sx={contstyle} borderRadius={5}>
+        <Box sx={contstyle} borderRadius={2}>
 
                 {openSort && <SortPopup sort={props.sort} setSort={props.setSort} open={openSort} setOpenSort={setOpenSort} />}
                 <Button className="but" onClick={()=>setOpenSort(true)}>
+                    <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                     <Sort fontSize="medium"/>
+                    <Typography variant="caption" sx={{mt:0.5,fontSize:"0.8em"}}>sort</Typography>
+                    </Box>
                 </Button>
 
                 {openFilter && <FilterPopup open={openFilter} setOpen={setOpenFilter} filters={props.filters} setFilters={handleFiltersChange}/>}
-                <Button className="but">
-                    <FilterAltIcon fontSize="medium" onClick={()=>setOpenFilter(true)}/>
+                <Button className="but" onClick={()=>setOpenFilter(true)}>
+                    <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+                    <FilterAltIcon fontSize="medium"/>
+                    <Typography variant="caption" sx={{mt:0.5,fontSize:"0.8em"}}>filter</Typography>
+                    </Box>
                 </Button>  
 
+                {openGroup && <GroupPopup open={openGroup} setOpen={setOpenGroup} group={props.group} setGroup={handleGroupChange}/>}
+                <Button className="but"  onClick={()=>setOpenGroup(true)}> 
+                    <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+                    <GroupWork fontSize="medium"/>
+                    <Typography sx={{mt:0.5,fontSize:"0.8em"}} variant="caption">group</Typography>
+                    </Box>
+                </Button>
+                
                 {openAdd && <AddPopup open={openAdd} setOpen={setOpenAdd} addTransaction={props.addTransaction}/>}
-                <Button className="but">
-                    <Add fontSize="medium" onClick={()=>setOpenAdd(true)}/>
+                <Button className="but" onClick={()=>setOpenAdd(true)}>
+                    <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+                    <Add fontSize="medium"/>
+                    <Typography variant="caption" sx={{mt:0.5,fontSize:"0.8em"}}>Add</Typography>
+                    </Box>
                 </Button>
 
-                <Button className="but"> 
-                    <Remove fontSize="medium"/>
-                </Button>
+
+
         </Box>
     )
 }
@@ -288,9 +273,17 @@ const contstyle={
     display:"flex",
     justifyContent:"space-between",
     alignItems:"center",
-    my:1,
+    mt:1,
+    mb:0.5,
     // p:1,
     flexShrink:'0',
     backgroundColor:"white",
-    boxShadow:"0 2px 5px lightgrey",
+    // boxShadow:"0 2px 5px lightgrey",
+    // boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+    // boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
+    boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
 } 
+
+const shadow={
+    boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px'
+}
