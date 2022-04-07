@@ -8,18 +8,18 @@ Help me build the most feature rich expense management app.
 
 ## Hosted on firebase url https://expenserecoder.web.app
 
-<figure>
-  <img alt="app" src="./DemoImages/app.jpeg" height="320px" />
-  <figcaption>App view</figcaption>
-</figure>
-<figure>
-  <img alt="group by" src="./DemoImages/group.jpeg" height="320px"  />
-  <figcaption>Group by year</figcaption>
-</figure>
-<figure>
-  <img alt="filter by" src="./DemoImages/filters.jpeg" height="320px" />
-  <figcaption>Filter by menu</figcaption>
-</figure>
+<div style="display:flex">
+  <img style="display:inline" alt="app" src="./DemoImages/app.jpeg" height="320px" />
+<!--   <span>App view</span> -->
+<!-- </div> -->
+<!-- <div style="display:flex"> -->
+  <img style="display:inline" alt="group by" src="./DemoImages/group.jpeg" height="320px"  />
+<!--   <span>Group by year</span> -->
+<!-- </div> -->
+<!-- <div style="display:flex"> -->
+  <img style="display:inline" alt="filter by" src="./DemoImages/filters.jpeg" height="320px" />
+<!--   <span>Filter by menu</span> -->
+</div>
 
 Todo next
 
