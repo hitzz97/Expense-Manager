@@ -1,6 +1,5 @@
 popups and tool tips UI imporovements  
 
-Persistence
 add labels, group by labels, filter by labels
 
 multiple delete, delete all
