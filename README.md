@@ -7,9 +7,9 @@ Built using Mobile first approach.
 ## Hosted on firebase url https://expenserecoder.web.app
 
 <div style="display:flex; flex-direction:column; justify-content:space-evenly">
-<img alt="group by" src="./DemoImages/group"/>
-<img alt="filter by" src="./DemoImages/filters"/>
-<img alt="app" src="./DemoImages/app"/>
+<img alt="group by" src="./DemoImages/group.jpeg"/>
+<img alt="filter by" src="./DemoImages/filters.jpeg"/>
+<img alt="app" src="./DemoImages/app.jpeg"/>
 </div>
 
 Todo next
