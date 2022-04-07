@@ -8,8 +8,13 @@ import { useState } from "react";
 import "./Tools.css" 
 import Popup from "./Popup/Popup";
 import AddPopup from "./Popup/AddPopup";
+import { useDispatch, useSelector } from "react-redux";
+import { setFilters, setGroup, setSort } from "../../Redux/Slices/insightSlice";
 
 function SortPopup(props){
+    const sort = useSelector((state)=>state.insight.sort);
+    const dispatch = useDispatch();
+
     const handleClose= ()=>{
         props.setOpenSort(false);
         setTimeout(()=>history.back(), 100);
@@ -23,32 +28,32 @@ function SortPopup(props){
             <Box px={3} pb={2}>
                 <FormLabel id="demo-error-radios">Date</FormLabel>
                 <Box my={1} sx={{display:"flex",flexDirection:"column"}}>
-                    <Button variant="text" onClick={()=>props.setSort("latest")}>
+                    <Button variant="text" onClick={()=>dispatch(setSort("latest"))}>
                         <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center",width:"100%"}}>
                             <Typography variant="subtitle2">Latest first</Typography>
-                            {props.sort==="latest"?<CheckBox/>:<CheckBoxOutlineBlank/>}
+                            {sort==="latest"?<CheckBox/>:<CheckBoxOutlineBlank/>}
                         </Box>
                     </Button>   
-                    <Button variant="text" onClick={()=>props.setSort("oldest")}>
+                    <Button variant="text" onClick={()=>dispatch(setSort("oldest"))}>
                         <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center",width:"100%"}}>
                         <Typography variant="subtitle2">Oldest first</Typography>
-                        {props.sort==="oldest"?<CheckBox/>:<CheckBoxOutlineBlank/>}
+                        {sort==="oldest"?<CheckBox/>:<CheckBoxOutlineBlank/>}
                         </Box>
                     </Button>   
                 </Box>
                 <FormLabel id="demo-error-radios">Amount</FormLabel>
                 <Box my={1} sx={{display:"flex",flexDirection:"column"}}   >
-                    <Button variant="text" onClick={()=>props.setSort("highest")}>
+                    <Button variant="text" onClick={()=>dispatch(setSort("highest"))}>
                     <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center",width:"100%"}}>
                         <Typography variant="subtitle2">Highest first</Typography>
-                        {props.sort==="highest"?<CheckBox/>:<CheckBoxOutlineBlank/>}
+                        {sort==="highest"?<CheckBox/>:<CheckBoxOutlineBlank/>}
                         </Box>
                     </Button>   
-                    <Button variant="text" onClick={()=>props.setSort("lowest")}>
+                    <Button variant="text" onClick={()=>dispatch(setSort("lowest"))}>
                     <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center",width:"100%"}}>
 
                         <Typography variant="subtitle2">Lowest first</Typography>
-                        {props.sort==="lowest"?<CheckBox/>:<CheckBoxOutlineBlank/>}
+                        {sort==="lowest"?<CheckBox/>:<CheckBoxOutlineBlank/>}
                         </Box>
                     </Button>   
                 </Box>
@@ -63,6 +68,9 @@ function SortPopup(props){
 }
 
 function FilterPopup(props){
+    const filters = useSelector((state)=>state.insight.filters);
+    const dispatch = useDispatch();
+
     const handleClose= ()=>{
         props.setOpen(false);
         setTimeout(()=>history.back(), 100);
@@ -79,11 +87,11 @@ function FilterPopup(props){
                 <Box mx={1} >
                     <Box sx={{display:"flex", justifyContent:"space-between", alignItems:'center'}}>
                         <label htmlFor="credits" ><Typography component={'div'}>Credits</Typography></label>
-                        <Switch id="credits"  checked={props.filters.credits} onChange={()=>props.setFilters({credits:!props.filters.credits})} />
+                        <Switch id="credits"  checked={filters.credits} onChange={()=>dispatch(setFilters({credits:!filters.credits}))} />
                     </Box>
                     <Box sx={{display:"flex", justifyContent:"space-between", alignItems:'center'}}>
                         <label htmlFor="debits"><Typography component={'div'}>Debits</Typography></label>
-                        <Switch id="debits" checked={props.filters.debits} onChange={()=>props.setFilters({debits:!props.filters.debits})} />
+                        <Switch id="debits" checked={filters.debits} onChange={()=>dispatch(setFilters({debits:!filters.debits}))} />
                     </Box>
                 </Box>
                 
@@ -95,8 +103,8 @@ function FilterPopup(props){
                         <Input 
                             type={'number'} 
                             id="minAmt"
-                            value={props.filters.minAmt} 
-                            onChange={(e)=>props.setFilters({minAmt:Number(e.target.value)})} 
+                            value={(filters.minAmt)?filters.minAmt:""} 
+                            onChange={(e)=>dispatch(setFilters({minAmt:Number(e.target.value)}))} 
                             // variant="standard" 
                             className="removeOutline"
                         />
@@ -106,8 +114,8 @@ function FilterPopup(props){
                         <Input 
                             type={'number'} 
                             id="maxAmt"
-                            value={props.filters.maxAmt} 
-                            onChange={(e)=>props.setFilters({maxAmt:Number(e.target.value)})} 
+                            value={(filters.maxAmt)?filters.maxAmt:""} 
+                            onChange={(e)=>dispatch(setFilters({maxAmt:Number(e.target.value)}))} 
                             // variant="standard" 
                             className="removeOutline"
                             />    
@@ -123,8 +131,8 @@ function FilterPopup(props){
                         fullWidth
                             id="start"
                             type={'Date'} 
-                            value={props.filters.startDate} 
-                            onChange={(e)=>props.setFilters({startDate:e.target.value})} 
+                            value={filters.startDate} 
+                            onChange={(e)=>dispatch(setFilters({startDate:e.target.value}))} 
                             // variant="standard" 
                             className="removeOutline inpdate"
                         />                
@@ -136,8 +144,8 @@ function FilterPopup(props){
                             sx={{m:0}}
                             type={'Date'} 
                             id="end"
-                            value={props.filters.endDate} 
-                            onChange={(e)=>props.setFilters({endDate:e.target.value})} 
+                            value={filters.endDate} 
+                            onChange={(e)=>dispatch(setFilters({endDate:e.target.value}))} 
                             // variant="standard" 
                             className="removeOutline"
                             />                
@@ -153,6 +161,9 @@ function FilterPopup(props){
 }
 
 function GroupPopup(props){
+    const group = useSelector((state)=>state.insight.group);
+    const dispatch = useDispatch();
+
     // const [value, setValue] = useState(props.group);
     const handleClose= ()=>{
         props.setOpen(false);
@@ -160,11 +171,11 @@ function GroupPopup(props){
     }
     function handleDMYChange(e){
         // console.log("group set")
-        props.setGroup({dmy:e});
+        dispatch(setGroup({dmy:e}));
     }
     const RadioProps=(e)=>{
         return {
-            checked: props.group.dmy === e,
+            checked: group.dmy === e,
         }
     }
 
@@ -177,26 +188,25 @@ function GroupPopup(props){
                 {/* month range, */}
             <Box p={2} pb={0.5}> 
                 {/* <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel> */}
-                <ListItemButton selected={'none'===props.group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} 
-                onClick={()=>handleDMYChange('none')}>
+                <ListItemButton selected={'none'===group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('none')}>
                     <Box sx={{display:'flex',justifyContent:"space-between", alignItems:"center",width:"100%"}}>
                         <Typography>None</Typography>
                         <Radio {...RadioProps('none')}/>
                     </Box>
                 </ListItemButton>
-                <ListItemButton selected={'day'===props.group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('day')}>
+                <ListItemButton selected={'day'===group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('day')}>
                     <Box sx={{display:'flex',justifyContent:"space-between", alignItems:"center",width:"100%"}}>
                         <Typography>Day</Typography>
                         <Radio {...RadioProps('day')}/>
                     </Box>
                 </ListItemButton>
-                <ListItemButton selected={'month'===props.group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('month')}>
+                <ListItemButton selected={'month'===group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('month')}>
                     <Box sx={{display:'flex',justifyContent:"space-between", alignItems:"center",width:"100%"}}>
                         <Typography>Month</Typography>
                         <Radio {...RadioProps('month')}/>
                     </Box>
                 </ListItemButton>
-                <ListItemButton selected={'year'===props.group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('year')}>
+                <ListItemButton selected={'year'===group.dmy} divider sx={{py:0, '&.Mui-selected':shadow}} onClick={()=>handleDMYChange('year')}>
                     <Box sx={{display:'flex',justifyContent:"space-between", alignItems:"center",width:"100%"}}>
                         <Typography>Year</Typography>
                         <Radio {...RadioProps('year')}/>
@@ -218,20 +228,11 @@ export default function Tools(props){
     const [openAdd, setOpenAdd] = useState(false);
     const [openGroup, setOpenGroup] = useState(false);
     // const [openSort, setOpenSort] = useState(false);
-    function handleFiltersChange(change){
-        let obj = {...props.filters, ...change}
-        console.log(obj)
-        props.setFilters(obj);
-    }
-    function handleGroupChange(change){
-        let obj = {...props.group, ...change}
-        console.log(obj)
-        props.setGroup(obj);
-    }
+
     return (
         <Box sx={contstyle} borderRadius={2}>
 
-                {openSort && <SortPopup sort={props.sort} setSort={props.setSort} open={openSort} setOpenSort={setOpenSort} />}
+                {openSort && <SortPopup open={openSort} setOpenSort={setOpenSort} />}
                 <Button className="but" onClick={()=>setOpenSort(true)}>
                     <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                     <Sort fontSize="medium"/>
@@ -239,7 +240,7 @@ export default function Tools(props){
                     </Box>
                 </Button>
 
-                {openFilter && <FilterPopup open={openFilter} setOpen={setOpenFilter} filters={props.filters} setFilters={handleFiltersChange}/>}
+                {openFilter && <FilterPopup open={openFilter} setOpen={setOpenFilter}/>}
                 <Button className="but" onClick={()=>setOpenFilter(true)}>
                     <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                     <FilterAltIcon fontSize="medium"/>
@@ -247,7 +248,7 @@ export default function Tools(props){
                     </Box>
                 </Button>  
 
-                {openGroup && <GroupPopup open={openGroup} setOpen={setOpenGroup} group={props.group} setGroup={handleGroupChange}/>}
+                {openGroup && <GroupPopup open={openGroup} setOpen={setOpenGroup} />}
                 <Button className="but"  onClick={()=>setOpenGroup(true)}> 
                     <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                     <GroupWork fontSize="medium"/>
@@ -255,16 +256,13 @@ export default function Tools(props){
                     </Box>
                 </Button>
                 
-                {openAdd && <AddPopup open={openAdd} setOpen={setOpenAdd} addTransaction={props.addTransaction}/>}
+                {openAdd && <AddPopup open={openAdd} setOpen={setOpenAdd} />}
                 <Button className="but" onClick={()=>setOpenAdd(true)}>
                     <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                     <Add fontSize="medium"/>
                     <Typography variant="caption" sx={{mt:0.5,fontSize:"0.8em"}}>Add</Typography>
                     </Box>
                 </Button>
-
-
-
         </Box>
     )
 }

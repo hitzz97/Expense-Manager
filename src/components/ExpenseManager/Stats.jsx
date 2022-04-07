@@ -1,10 +1,17 @@
 import { Box, Button, ButtonGroup, FormLabel, TextField, Typography } from "@mui/material";
-import { AccountBalance, AccountBalanceWallet, AccountBalanceWalletRounded, Cancel, Done, Edit } from "@mui/icons-material";
+import {  AccountBalanceWalletRounded, Cancel, Done, Edit } from "@mui/icons-material";
 import "./Stats.css"
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setiBal } from "../../Redux/Slices/transactionSlice";
 
 export default function Stats(props){
-    const [value, setValue] = useState(props.bal);
+    const bal = useSelector(state=>state.trans.iBal);
+    const credit = useSelector(state=>state.trans.credit);
+    const debit = useSelector(state=>state.trans.debit);
+    const dispatch =  useDispatch()
+
+    const [value, setValue] = useState(bal);
     const [edit, setEdit] = useState(false);
     // const inp = useRef(null);
     const handleClick = ()=>{
@@ -12,7 +19,7 @@ export default function Stats(props){
     }
     function handleSubmit(e){
         e.preventDefault()
-        props.setBal(Number(value));
+        dispatch(setiBal(value));
         handleClick();
     }
     
@@ -46,7 +53,7 @@ export default function Stats(props){
                 {
                     !edit && 
                     <>
-                    <Typography sx={{alignSelf:"center"}}  variant="h4" onClick={handleClick} color="#4a148c" fontWeight={600}>{props.bal}</Typography> 
+                    <Typography sx={{alignSelf:"center"}}  variant="h4" onClick={handleClick} color="#4a148c" fontWeight={600}>{ bal}</Typography> 
                     <Box sx={{ml:2, mt:0.5,display:'flex',alignItems:"center", alignSelf:"flex-start"}} onClick={handleClick}> 
                         <Edit color="primary" fontSize="small"/>
                         <Typography variant="caption" color='primary'>EDIT</Typography>
@@ -64,11 +71,11 @@ export default function Stats(props){
 
             <Box sx={{display:'flex'}} className="balance">
             <Box mx={1} sx={{display:'flex', flexDirection:"column", alignItems:'center', px:2}}>
-                <Typography variant="h6" color="#6a1b9a" fontWeight={600}>{props.credit}</Typography>
+                <Typography variant="h6" color="#6a1b9a" fontWeight={600}>{credit}</Typography>
                 <Typography variant="body1" fontWeight={500}>Credit</Typography>
             </Box>
             <Box mx={1} sx={{display:'flex', flexDirection:"column", alignItems:'center', px:2, color:"error"}}>
-                <Typography variant="h6" color="#6a1b9a" fontWeight={600}>{props.debit}</Typography>
+                <Typography variant="h6" color="#6a1b9a" fontWeight={600}>{debit}</Typography>
                 <Typography variant="body1" fontWeight={500}>Debit</Typography>
             </Box>
             </Box>

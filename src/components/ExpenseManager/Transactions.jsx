@@ -1,10 +1,12 @@
-import { Box, ListItem, ListItemButton, Typography, Button, TextField, ClickAwayListener, Fab, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { Box, ListItem, ListItemButton, Typography, Button, TextField, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import "./Transactions.css"
 import { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CheckBoxOutlineBlank, Delete, Edit, ExpandMore } from "@mui/icons-material";
+import { Edit, ExpandMore } from "@mui/icons-material";
 import AddPopup from "./Popup/AddPopup";
 import styled from "@emotion/styled";
+import { useDispatch, useSelector } from "react-redux";
+import { removeTrans } from "../../Redux/Slices/transactionSlice";
 
 const StyledLIB = styled(ListItemButton)(({ theme }) => ({
     // width: 300,
@@ -35,7 +37,12 @@ const Tstyle={
 }
 const Transaction = (props) => {
     const [edit,setEdit] = useState(false);
+    const dispatch = useDispatch()
+
     function toggleEdit(){setEdit(!edit);}
+    function handleDelete(){
+        dispatch(removeTrans(props.ctime))
+    }
     return (
         <Accordion disableGutters sx={{p:0, m:0, ...shadow}}>
         <AccordionSummary expandIcon={<ExpandMore />} sx={{px:0.8}}>
@@ -55,7 +62,7 @@ const Transaction = (props) => {
             (!props.group) &&
             <Box sx={Tstyle}>
                 <Button size="small">
-                    <Box onClick={props.removeTrans} color='error' display='flex' flexDirection='column' alignItems='center'>
+                    <Box onClick={handleDelete} color='error' display='flex' flexDirection='column' alignItems='center'>
                         <DeleteIcon color="error"/>
                         Delete
                     </Box>
@@ -72,7 +79,6 @@ const Transaction = (props) => {
                 <AddPopup 
                 open={edit} 
                 setOpen={setEdit} 
-                addTransaction={props.addTransaction}
                 edit={{amt:props.amt, notes:props.notes, type:props.type, date:props.date, ctime:props.ctime}}
                 />
                 }
@@ -97,24 +103,24 @@ const Transaction = (props) => {
 
 
 export default function Transactions(props){
+    const transactions = useSelector(state=>state.trans.trans);
+    const sort = useSelector((state)=>state.insight.sort);
+    const filters = useSelector((state)=>state.insight.filters);
+    const group = useSelector((state)=>state.insight.group);
+
+
     const [visibleTrans, setVisibleTrans] = useState([])
     // const [selected, setSelected] = useState("");
-    // function handleClick(ctime){
-    //     // console.log("clicked", ctime, selected)
-    //     if(selected === ctime)
-    //         setSelected("");
-    //     else
-    //         setSelected(ctime);
-    // }
+
     useEffect(()=>{
-        console.log("running effect to reOrder transactions.", props.transactions)
-        let {credits,debits, minAmt, maxAmt,startDate,endDate} = props.filterby;
+        // console.log("running effect to reOrder transactions.", transactions)
+        let {credits,debits, minAmt, maxAmt,startDate,endDate} = filters;
         // console.log(credits,debits, minAmt, maxAmt,startDate,endDate);
         let arr=[];
 
         //filter
-        for(let k in props.transactions){
-            let obj = props.transactions[k];
+        for(let k in transactions){
+            let obj = transactions[k];
             let {ctime,date,amt,type,notes} = obj;
             // console.log(ctime,date,amt,type,notes)
            
@@ -132,7 +138,7 @@ export default function Transactions(props){
             return ;
         }
         //group
-        if(props.group.dmy!=="none"){
+        if(group.dmy!=="none"){
             // if (!(props.sortby==='latest' || props.sortby==='oldest')){
             arr.sort((a,b)=>(new Date(b.date) - new Date(a.date)));
             // }
@@ -147,7 +153,7 @@ export default function Transactions(props){
             }
             for(let i=1; i<arr.length; i++){
                 let flag=false;
-                switch(props.group.dmy){
+                switch(group.dmy){
                     case 'day':{
                         if(grp.date === arr[i].date)
                             flag=true;
@@ -175,8 +181,8 @@ export default function Transactions(props){
                         grp.type='debit';
                 }
                 else{
-                    if(props.group.dmy==='month')grp.date=grp.date.slice(0,7);
-                    if(props.group.dmy==='year')grp.date= grp.date.slice(0,4);
+                    if(group.dmy==='month')grp.date=grp.date.slice(0,7);
+                    if(group.dmy==='year')grp.date= grp.date.slice(0,4);
                     narr.push({...grp, amt:Math.abs(grp.amt)})
                     // console.log(new Date().getTime())
                     grp = {
@@ -188,15 +194,15 @@ export default function Transactions(props){
                     }
                 }
             }
-            if(props.group.dmy==='month')grp.date=grp.date.slice(0,7);
-            if(props.group.dmy==='year')grp.date= grp.date.slice(0,4);
+            if(group.dmy==='month')grp.date=grp.date.slice(0,7);
+            if(group.dmy==='year')grp.date= grp.date.slice(0,4);
             narr.push({...grp, amt:Math.abs(grp.amt)});
             // console.log("GROUPED", narr);
             arr = narr;
         }
         //sort
         arr.sort((a,b)=>{
-            switch(props.sortby){
+            switch(sort){
                 case "latest":
                     return new Date(b.date) - new Date(a.date);
                 case "oldest":
@@ -212,7 +218,7 @@ export default function Transactions(props){
         // console.log(arr);
         setVisibleTrans(arr);
 
-    }, [props.sortby, props.filterby, props.transactions, props.group])
+    }, [sort, filters, transactions, group])
 
     return (
         <Box sx={style} className="scroll">
@@ -236,7 +242,6 @@ export default function Transactions(props){
                         return (
                             <Transaction 
                             colored={idx%2===0}
-                            removeTrans={()=>props.removeTrans(ctime)}
                             // onClick={()=>handleClick(ctime)}
                             date={date} 
                             amt={amt} 
@@ -244,7 +249,7 @@ export default function Transactions(props){
                             type={type} 
                             notes={notes} 
                             // selected={ctime===selected}
-                            addTransaction={props.addTransaction}
+                            // addTransaction={props.addTransaction}
                             group={e.objs!==undefined} 
                             objs={e.objs}
                             />

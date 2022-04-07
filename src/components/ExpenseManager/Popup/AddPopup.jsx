@@ -6,7 +6,8 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/lab";
 import Popup from './Popup'
-
+import { addTrans,removeTrans } from "../../../Redux/Slices/transactionSlice";
+import { useDispatch } from "react-redux";
 
 export default function AddPopup(props){
     const [ttype,setTtype] = useState('credit')
@@ -16,16 +17,21 @@ export default function AddPopup(props){
     const [bcolor, setbcolor] =useState('success')
     const [ctime, setCtime] = useState(false)
 
+    const dispatch = useDispatch();
+
     useEffect(()=>{
         let obj = props.edit
+        console.log("Editing", obj);
         if(obj!==undefined){
             setTtype(obj.type);
-            if(ttype==='credit')setbcolor("success");
-            else setbcolor("warning");
             setDate(new Date(obj.date));
             setAmt(obj.amt);
             setNotes(obj.notes);
             setCtime(obj.ctime);
+
+            if(obj.type==='credit')setbcolor("success");
+            else setbcolor("warning");
+            // console.log(bcolor, ttype, date, amt, notes, ctime);
         }
     },[])
 
@@ -41,7 +47,18 @@ export default function AddPopup(props){
         }
     }
     function handleAdd(){
-        props.addTransaction(date.toISOString().split('T')[0], amt, ttype, notes, ctime);
+        if(amt==""||amt==0){
+            alert("Please enter a valid amount!");
+            return;
+        }
+        if(ctime)dispatch(removeTrans(ctime))
+        dispatch(addTrans({
+            date:date.toISOString().split('T')[0],
+            amt:amt,
+            type:ttype,
+            notes:notes,
+            ctime:(ctime)?ctime:new Date().getTime(),
+        }))
         props.setOpen(false);
         setTimeout(()=>history.back(), 100);
     }
