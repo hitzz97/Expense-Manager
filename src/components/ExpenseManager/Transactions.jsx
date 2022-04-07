@@ -1,4 +1,4 @@
-import { Box, ListItem, ListItemButton, Typography, Button, TextField, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import { Box, ListItem, ListItemButton,FormLabel, Typography, Button, TextField, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import "./Transactions.css"
 import { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -43,12 +43,26 @@ const Transaction = (props) => {
     function handleDelete(){
         dispatch(removeTrans(props.ctime))
     }
+    function beautifyDate(date){
+        let months = ["Jan", 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        let sufix = ['th', 'st', 'nd', 'rd']
+        let d = date.split('-');
+        let [yr, mn, dt] = d;
+        if(dt){
+            return <>{Number(dt)}<sup>{(Number(dt)%10)>3?"th":sufix[Number(dt)%10]}</sup>{" "+months[Number(mn)-1]},{yr.slice(2)}</>
+        }else if (mn){
+            return months[Number(mn)-1]+","+yr.slice(2)
+        }
+        return yr
+    }
     return (
         <Accordion disableGutters sx={{p:0, m:0, ...shadow}}>
-        <AccordionSummary expandIcon={<ExpandMore />} sx={{px:0.8}}>
+        <AccordionSummary expandIcon={<ExpandMore />} sx={{px:0.9}}>
         {/* <StyledLIB selected={selected} sx={{zIndex:(props.group?2:1)}} className={props.colored?"colored":""} divider onClick={toggleSelect}> */}
             <Box sx={Tstyle} >
-                <Typography  variant="subtitle2">{props.date}</Typography>
+                <FormLabel>
+                <Typography  variant="subtitle2" fontWeight={500}>{beautifyDate(props.date)}</Typography>
+                </FormLabel>
                 <Box display='flex'>
                     {props.type==="credit"? <Typography variant="subtitle2">+</Typography>:
                     <Typography variant="subtitle2">-</Typography>  }
@@ -67,7 +81,7 @@ const Transaction = (props) => {
                         Delete
                     </Box>
                 </Button> 
-                <TextField size="small" sx={{border:0, textAlign:'center'}} defaultValue={props.notes} multiline maxRows={3} disabled variant="standard" />
+                <TextField size="small" sx={{border:0, textAlign:'center'}} defaultValue={(props.notes)?props.notes:"Edit to add notes"} multiline maxRows={3} disabled variant="standard" />
                 <Button size="small" onClick={toggleEdit}>
                     <Box  display='flex' flexDirection='column' alignItems='center'>
                         <Edit/>
