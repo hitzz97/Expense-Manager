@@ -6,7 +6,7 @@ import { Edit, ExpandMore } from "@mui/icons-material";
 import AddPopup from "./Popup/AddPopup";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
-import { removeTrans } from "../../Redux/Slices/transactionSlice";
+import { removeTrans } from "../../Redux/Slices/accountSlice";
 
 const StyledLIB = styled(ListItemButton)(({ theme }) => ({
     // width: 300,
@@ -41,7 +41,7 @@ const Transaction = (props) => {
 
     function toggleEdit(){setEdit(!edit);}
     function handleDelete(){
-        dispatch(removeTrans(props.ctime))
+        dispatch(removeTrans({accName:props.accName, ctime:props.ctime}))
     }
     function beautifyDate(date){
         let months = ["Jan", 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -117,7 +117,7 @@ const Transaction = (props) => {
 
 
 export default function Transactions(props){
-    const transactions = useSelector(state=>state.trans.trans);
+    const transactions = useSelector(state=>state.accounts[props.accName].trans);
     const sort = useSelector((state)=>state.insight.sort);
     const filters = useSelector((state)=>state.insight.filters);
     const group = useSelector((state)=>state.insight.group);
@@ -235,14 +235,14 @@ export default function Transactions(props){
     }, [sort, filters, transactions, group])
 
     return (
-        <Box sx={style} className="scroll">
+        <Box sx={{...style, mx:1}} className="scroll">
             <Box sx={{...stick}}>
                 {/* <ListItem >
                     <Typography variant="body2">Transactions</Typography>
                 </ListItem> */}
                 <ListItem >
                     {/* <Typography  variant="caption">Selected</Typography> */}
-                    <Box sx={{...Tstyle, mt:0}}>
+                    <Box sx={{...Tstyle, mt:0, mb:0.5}}>
                         <Typography  variant="caption">Date</Typography>
                         <Typography  variant="caption">Amount</Typography>
                     </Box>  
@@ -262,6 +262,7 @@ export default function Transactions(props){
                             key={ctime} ctime={ctime} 
                             type={type} 
                             notes={notes} 
+                            accName={props.accName}
                             // selected={ctime===selected}
                             // addTransaction={props.addTransaction}
                             group={e.objs!==undefined} 
@@ -282,8 +283,8 @@ const style = {
     // boxShadow:"0px 2px 5px grey",
     // height:"minContent",
     overflowY:"scroll",
-    width:"100%",
-    margin: '0 auto',
+    // width:"100%",
+    // margin: '0 auto',
     // pt:0,
 }
 const stick ={

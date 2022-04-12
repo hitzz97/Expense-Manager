@@ -3,12 +3,14 @@ import {  AccountBalanceWalletRounded, Cancel, Done, Edit } from "@mui/icons-mat
 import "./Stats.css"
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setiBal } from "../../Redux/Slices/transactionSlice";
+import { setiBal } from "../../Redux/Slices/accountSlice";
+import { useParams } from "react-router-dom";
 
 export default function Stats(props){
-    const bal = useSelector(state=>state.trans.iBal);
-    const credit = useSelector(state=>state.trans.credit);
-    const debit = useSelector(state=>state.trans.debit);
+    // const params=useParams();
+    const bal = useSelector(state=>state.accounts[props.accName].iBal);
+    const credit = useSelector(state=>state.accounts[props.accName].credit);
+    const debit =  useSelector(state=>state.accounts[props.accName].debit);
     const dispatch =  useDispatch()
 
     const [value, setValue] = useState(bal);
@@ -19,12 +21,12 @@ export default function Stats(props){
     }
     function handleSubmit(e){
         e.preventDefault()
-        dispatch(setiBal(value));
+        dispatch(setiBal({accName:props.accName, amt:value}));
         handleClick();
     }
     
     return (
-        <Box sx={style} >
+        <Box sx={{...style, mx:1}} >
             <Box className='styleMe'/>
             <FormLabel>
             <Typography  variant="body2" sx={{fontWeight:500}}>Balance</Typography>

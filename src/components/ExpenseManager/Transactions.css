@@ -3,7 +3,7 @@
   /* width: 98%; */
   overflow-y: scroll;
   margin: 0 auto;
-  padding: 0.5%;
+  /* padding: 0.5%; */
   /* box-shadow:rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
 }
 .scroll::-webkit-scrollbar {

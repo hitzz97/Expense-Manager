@@ -1,0 +1,204 @@
+.styleb1{
+    width: 250px;
+    height: 250px;
+    border-bottom-right-radius: 200%;
+    position: Fixed;
+    top: 0%;
+    left: 0%;
+    z-index: -1;
+    background-color: #0d47a1;
+    box-shadow: 0 0 15px #1a237e    ;
+}
+
+.styleb2{
+    width: 200px;
+    height: 200px;
+    /* border-top-left-radius: 200%;
+    border-bottom-left-radius: 200%; */
+    border-radius: 100%;
+    position: Fixed;
+    top: -10%;
+    left: 40%;
+    z-index: -2;
+    background-color: #1976d2;
+    box-shadow: 0 0 15px #303f9f;
+}
+
+.styleb3{
+    width: 170px;
+    height: 170px;
+    /* border-top-left-radius: 200%;
+    border-bottom-left-radius: 200%; */
+    border-radius: 100%;
+    position: Fixed;
+    top: 20%;
+    left: 20%;
+    z-index: -2;
+    background-color: #64b5f6;
+    box-shadow: 0 0 15px #7986cb;
+}
+
+.styleb4{
+    width: 50vw;
+    height: 55vh;
+    /* border-top-left-radius: 200%;
+    border-bottom-left-radius: 200%; */
+    position: Fixed;
+    bottom: 0%;
+    left: -20%;
+    z-index: -2;
+    background-color: #7e57c2;
+    /* box-shadow: 0 0 15px #b28900; */
+    transform: skewX(30deg);
+}
+
+/* .styleb4{
+    width: 170px;
+    height: 170px;
+    border-top-left-radius: 200%;
+    border-bottom-left-radius: 200%; 
+    border-radius: 100%;
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    z-index: -2;
+    background-color: #ffc400;
+    box-shadow: 0 0 15px #b28900;
+} */
+
+.accounts{
+    border-radius:10px;
+    backdrop-filter:blur(5px);
+    width:90%;
+    padding:0 1%;
+    height: fit-content;
+    max-height: calc(100vh*0.3);
+    overflow-y: scroll;
+    /* text-align:center; */
+    /* margin:20% auto; */
+    /* margin: 0 auto; */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.765) !important;
+}
+
+.fallingIcns{
+    position: absolute;
+    z-index: 4;
+    animation: fall 5s ease-in infinite;
+    opacity: 1;
+}
+@keyframes fall {
+    0%{}
+    100%{
+        top: 100%;
+        opacity: 0;
+    }
+}
+.heading{
+    text-shadow:2px 2px 3px rgba(0,0,0,0.5);
+    color: rgb(255, 255, 255);
+    text-shadow: 0 0 4px black;
+    font-weight: 400;
+    /* visibility: hidden; */
+    /* transform: translateY(20%); */
+    animation: moveUP 2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+}
+@keyframes moveUP {
+    0%{
+        opacity: 0;
+        transform: translateY(20%);
+    }100%{
+        opacity: 1;
+        transform: translateY(-20%);
+    }
+}
+.heading:nth-of-type(2n){
+    font-weight: 400;
+    color: rgb(224, 224, 224);
+}
+.features{
+    position: absolute;
+    top: 0%;
+    width: 100%;
+    padding:2%;
+    /* left:2.5%; */
+    padding-bottom: 20%;
+    opacity: 0;
+    background-color: white;
+    z-index: -1;
+    /* transform:translateY(-100%); */
+}
+.up{
+    position: absolute;
+    opacity: 1;
+    transform: translate(-100%);
+}
+.cards{
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6)!important;
+    margin-bottom: 5%;
+}
+
+.floating{
+    animation: float 1s ease-in-out 2s infinite alternate;
+}
+@keyframes float {
+    0%{
+        transform: translateY(2.5%);
+    }100%{
+        transform: translateY(-2.5%);
+    }
+}
+
+.contBlock{
+    max-width: 90%;
+    margin: 3% auto;
+    padding: 0 5%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    display: flex;
+    /* border: 1px solid grey; */
+    border-radius: 5px;
+}
+.block{
+    padding: 2%;
+    height: 100px;
+    width: 100px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    background-color: rgba(240, 255, 255, 0.734)     !important;
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+    margin: 2% !important;
+    flex-wrap: wrap;
+}
+.extBlock{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    max-height: 40vh;
+    overflow-y: scroll;
+}
+.accName{
+    word-wrap: break-word;
+}
+.deleteAccBtn{
+    position: absolute !important;
+    top: -5%;
+    right: -5%;
+    padding: 3%;
+    height: 30px;
+    width: 30px;
+    margin: 0%;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    background-color: azure;
+    border-radius: 20px;
+}

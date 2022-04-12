@@ -4,6 +4,12 @@ import Tools from "./Tools"
 import Stats from "./Stats";
 import Transactions from "./Transactions"
 import { createTheme } from "@mui/material";
+import { Outlet, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setTransFromAcc } from "../../Redux/Slices/transactionSlice";
+import { setAccount } from "../../Redux/Slices/accountSlice";
+import Header from "./Header";
 // import { useEffect, useState } from "react";
 
 const theme=createTheme({
@@ -16,8 +22,8 @@ const theme=createTheme({
             contrastText: '#fff',
         },
         secondary: {
-            light: '#ff7961',
-            main: '#f44336',
+            light: '#f3e5f5',
+            main: '#ce93d8',
             dark: '#ba000d',
             contrastText: '#000',
         },
@@ -36,107 +42,45 @@ const theme=createTheme({
                 }
             }
         }
+    },
+    typography: {
+        fontFamily: [
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif"
+        ].join(",")
     }
 })
 
 export default function OuterContainer(props){
-    // const [filters, setFilters] = useState({
-    //     credits:true, 
-    //     debits:true, 
-    //     minAmt:0, 
-    //     maxAmt:99999999,
-    //     startDate:'1990-03-13',
-    //     endDate:'2050-01-13',
-    // });
-    // const [sort, setSort] = useState("latest");
-    // const [group, setGroup] = useState({
-    //     dmy:"none",
-    //     label:"none",
-    // });
-
-    // function addTrans(date, amt, type, notes, ctime){
-    //     if(ctime){
-    //         console.log("removing")
-    //         removeTrans(ctime);
-    //     }
-    //     ctime = ctime?ctime:new Date().getTime();
-    //     let obj = {
-    //         date:date, 
-    //         amt:amt, 
-    //         type:type,
-    //         notes:notes,
-    //         ctime:ctime
-    //     }
-    //     setTrans((curr)=>{
-    //         let newObj = {...curr, [ctime]:obj};
-    //         return newObj
-    //     });
-
-    //     let dt = obj.date;
-    //     let tc=0, td=0, m=new Date().getMonth();
-    //     if(obj.type==='credit')
-    //         tc+=Number(obj.amt);
-    //     else
-    //         td-=Number(obj.amt);
-    //     console.log(tc, td);
-    //     if(new Date(dt).getMonth() === m){
-    //         setCredit(credit+tc);
-    //         setDebit(debit-td);
-    //     }
-    //     setiBal(curr=>curr+tc+td);
-    // }
-
-    // function removeTrans(ctime){
-    //     let obj = trans[ctime];
-    //     let dt = obj.date;
-    //     let tc=0, td=0, m=new Date().getMonth();
-
-    //     if(obj.type==='credit')
-    //         tc+=Number(obj.amt);
-    //     else
-    //         td-=Number(obj.amt);
-    //     if(new Date(dt).getMonth() === m){
-    //         setCredit(credit-tc);
-    //         setDebit(debit+td);
-    //     }
-    //     setiBal(curr=>curr-tc-td);
-    //     setTrans((curr)=>{
-    //         let allT = {...curr}
-    //         delete(allT[ctime])
-    //         return allT;
-    //     })
-    // }
-
+    
+    const dispatch = useDispatch();
+    const accounts = useSelector(state=>state.accounts);
+    // const trans = useSelector(state=>state.trans);
+    const params = useParams();
     // useEffect(()=>{
-    //     // adjust credit, debit
-    //     console.log("recalculating cr, dr" );
-    //     let m = new Date().getMonth();
-    //     let c = 0,d=0,b=0;
-    //     for (let key in trans){
-    //         let dt = trans[key].date;
-    //         let tc=0, td=0;
-    //         if(trans[key].type==='credit')
-    //                 tc+=Number(trans[key].amt);
-    //             else
-    //                 td-=Number(trans[key].amt);
-    //         if(new Date(dt).getMonth() === m){
-    //             c+=tc;
-    //             d-=td;
-    //         }
-    //         b+=(tc+td);
-    //         console.log(new Date(dt).getMonth(),m)
+    //     console.log(params.accName);
+    //     if(trans.accName===""){
+    //         // console.log("if")
+    //         dispatch(setTransFromAcc(accounts[params.accName]))
     //     }
-    //     setCredit(c);
-    //     setDebit(d);
-    //     setiBal(b);
+    //     else if (trans.accName === params.accName);
+    //     else{
+    //         // console.log("else");
+    //         dispatch(setAccount({accName:trans.accName, obj:trans}))
+    //         dispatch(setTransFromAcc(accounts[params.accName]))
+    //     }
     // },[])
 
     return (
         <ThemeProvider theme={theme}>
         <Box className="outerContainer">
-            <Stats/>
-            <Tools />
-            <Transactions/>
+            <Header accName={params.accName}/>
+            <Stats accName={params.accName}/>
+            <Tools accName={params.accName}/>
+            <Transactions accName={params.accName}/>
+            <Outlet/>
         </Box>
          </ThemeProvider>
     )

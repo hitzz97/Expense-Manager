@@ -230,7 +230,7 @@ export default function Tools(props){
     // const [openSort, setOpenSort] = useState(false);
 
     return (
-        <Box sx={contstyle} borderRadius={2}>
+        <Box sx={{...contstyle, mx:1}} borderRadius={2}>
 
                 {openSort && <SortPopup open={openSort} setOpenSort={setOpenSort} />}
                 <Button className="but" onClick={()=>setOpenSort(true)}>
@@ -256,7 +256,7 @@ export default function Tools(props){
                     </Box>
                 </Button>
                 
-                {openAdd && <AddPopup open={openAdd} setOpen={setOpenAdd} />}
+                {openAdd && <AddPopup open={openAdd} setOpen={setOpenAdd} accName={props.accName}/>}
                 <Button className="but" onClick={()=>setOpenAdd(true)}>
                     <Box sx={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                     <Add fontSize="medium"/>

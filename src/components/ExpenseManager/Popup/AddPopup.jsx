@@ -6,7 +6,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/lab";
 import Popup from './Popup'
-import { addTrans,removeTrans } from "../../../Redux/Slices/transactionSlice";
+import { addTrans,removeTrans } from "../../../Redux/Slices/accountSlice";
 import { useDispatch } from "react-redux";
 
 export default function AddPopup(props){
@@ -53,11 +53,14 @@ export default function AddPopup(props){
         }
         if(ctime)dispatch(removeTrans(ctime))
         dispatch(addTrans({
-            date:date.toISOString().split('T')[0],
-            amt:amt,
-            type:ttype,
-            notes:notes,
-            ctime:(ctime)?ctime:new Date().getTime(),
+            accName: props.accName,
+            obj: {
+                date:date.toISOString().split('T')[0],
+                amt:amt,
+                type:ttype,
+                notes:notes,
+                ctime:(ctime)?ctime:new Date().getTime(),
+            }
         }))
         props.setOpen(false);
         setTimeout(()=>history.back(), 100);

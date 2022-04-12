@@ -1,10 +1,8 @@
-popups and tool tips UI imporovements  
-
 add labels, group by labels, filter by labels
 
 multiple delete, delete all
 back button cancels edit 
 
-add a homepage
-add multiple accounts in home page 
 add frequent transactions in add transaction
+
+contact me

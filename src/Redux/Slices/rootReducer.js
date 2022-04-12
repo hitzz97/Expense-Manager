@@ -1,6 +1,6 @@
-import transactionSlice from "./transactionSlice"
 import { combineReducers } from "redux";
 import insightSlice from "./insightSlice";
+import accountSlice from "./accountSlice";
 
 // const rootReducer = {
 //     reducer: {
@@ -9,7 +9,7 @@ import insightSlice from "./insightSlice";
 // }
 
 const rootReducer = combineReducers({
-    trans: transactionSlice.reducer,
+    accounts: accountSlice.reducer,
     insight: insightSlice.reducer
 })
 

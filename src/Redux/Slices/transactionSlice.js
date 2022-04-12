@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+const initialState = {
+    iBal: 0,
+    credit: 0,
+    debit: 0,
+    accName: "",
+    trans: {},
+}
 const transactionSlice = createSlice({
     name: "trans",
-    initialState: {
-        iBal: 0,
-        credit: 0,
-        debit: 0,
-        trans: {},
-    },
+    initialState: initialState,
     reducers: {
         addTrans: (state, action) => {
             let obj = action.payload;
@@ -26,7 +27,7 @@ const transactionSlice = createSlice({
                 state.debit -= td;
             }
             state.iBal += tc + td;
-            console.log("addTrans", state);
+            console.log("addTrans");
         },
         removeTrans: (state, action) => {
             let ctime = action.payload;
@@ -44,13 +45,18 @@ const transactionSlice = createSlice({
             }
             state.iBal -= (tc + td);
             delete (state.trans[ctime])
-            console.log("removeTrans", state);
+            console.log("removeTrans");
         },
         setiBal: (state, action) => {
             state.iBal = Number(action.payload)
+        },
+        setTransFromAcc: (state, action) => {
+            // Object.assign
+            // console.log(action.payload);
+            Object.assign(state, action.payload);
         }
     }
 })
 
-export const { addTrans, removeTrans, setiBal } = transactionSlice.actions;
+export const { addTrans, removeTrans, setiBal, setTransFromAcc } = transactionSlice.actions;
 export default transactionSlice
