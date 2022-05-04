@@ -7,7 +7,6 @@ import { createTheme } from "@mui/material";
 import { Outlet, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setTransFromAcc } from "../../Redux/Slices/transactionSlice";
 import { setAccount } from "../../Redux/Slices/accountSlice";
 import Header from "./Header";
 // import { useEffect, useState } from "react";

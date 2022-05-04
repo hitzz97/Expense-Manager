@@ -51,7 +51,7 @@ export default function AddPopup(props){
             alert("Please enter a valid amount!");
             return;
         }
-        if(ctime)dispatch(removeTrans(ctime))
+        if(ctime)dispatch(removeTrans({ accName:props.accName, ctime }))
         dispatch(addTrans({
             accName: props.accName,
             obj: {

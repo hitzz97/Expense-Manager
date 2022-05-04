@@ -28,6 +28,7 @@ const accountSlice = createSlice({
         addTrans: (state, action) => {
             let { accName, obj } = action.payload;
             // console.log(state, action)
+            // creating entry ctime:obj in account
             state[accName].trans[obj.ctime] = obj;
 
             let dt = obj.date;

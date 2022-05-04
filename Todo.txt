@@ -6,3 +6,5 @@ back button cancels edit
 add frequent transactions in add transaction
 
 contact me
+
+optimize page for pc 

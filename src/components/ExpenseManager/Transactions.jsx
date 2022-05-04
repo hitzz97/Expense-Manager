@@ -93,6 +93,7 @@ const Transaction = (props) => {
                 <AddPopup 
                 open={edit} 
                 setOpen={setEdit} 
+                accName = {props.accName}
                 edit={{amt:props.amt, notes:props.notes, type:props.type, date:props.date, ctime:props.ctime}}
                 />
                 }
@@ -292,7 +293,7 @@ const stick ={
     top:'0px',
     zIndex:10,
     // pt:0.5,
-    backgroundColor:"rgb(230, 230, 230)",
+    backgroundColor:"rgb(244, 244, 244);",
 }
 
 

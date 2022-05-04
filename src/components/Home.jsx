@@ -39,7 +39,7 @@ function stringToColor(string) {
         bgcolor: stringToColor(name),
         width:50, height:50,
       },
-      children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+      children: `${name.split(' ')[0][0]}`,
     };
   }
 
@@ -52,7 +52,7 @@ function AccountBlock(props){
     }
     return (
         <Box component={ButtonBase} className="block" onClick={()=>navigate(props.link)}>
-            <Avatar {...stringAvatar('Acc one')} />
+            <Avatar {...stringAvatar(props.name)} />
             <Typography variant="subtitle1" className="accName">{props.name}</Typography>
             <Delete className="deleteAccBtn" color="error" onClick={handleDelete}/>
         </Box>
