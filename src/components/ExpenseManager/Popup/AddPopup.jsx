@@ -4,7 +4,7 @@ import { Box, Typography,Button, TextField, ButtonGroup, FormLabel} from "@mui/m
 import DateAdapter  from '@mui/lab/AdapterDayjs';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useEffect, useState } from "react";
-import { DatePicker } from "@mui/lab";
+import { MobileDatePicker } from "@mui/lab";
 import Popup from './Popup'
 import { addTrans,removeTrans } from "../../../Redux/Slices/accountSlice";
 import { useDispatch } from "react-redux";
@@ -83,7 +83,7 @@ export default function AddPopup(props){
             <Box px={2} mt={1} mb={3} display="flex" flexDirection="column" justifyContent="space-around" >
                 <Box display="flex" flexDirection="row"  alignItems='center' justifyContent="space-between">
                     <LocalizationProvider dateAdapter={DateAdapter } >
-                    <DatePicker
+                    <MobileDatePicker
                         label="Date"
                         value={date}
                         onChange={(v) => {

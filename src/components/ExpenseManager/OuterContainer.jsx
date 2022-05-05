@@ -75,9 +75,11 @@ export default function OuterContainer(props){
     return (
         <ThemeProvider theme={theme}>
         <Box className="outerContainer">
-            <Header accName={params.accName}/>
-            <Stats accName={params.accName}/>
-            <Tools accName={params.accName}/>
+            {/* <Box sx={{position:"sticky", top:0, left:0, zIndex:99,mb:1}}> */}
+                <Header accName={params.accName}/>
+                <Stats accName={params.accName}/>
+                <Tools accName={params.accName}/>
+            {/* </Box> */}
             <Transactions accName={params.accName}/>
             <Outlet/>
         </Box>

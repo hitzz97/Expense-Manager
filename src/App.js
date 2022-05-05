@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/Home';
 import { Skeleton } from '@mui/material';
 import NotFound from './components/NotFound';
+import Accounts from './components/ExpenseManager/Accounts';
 
 const persistor = persistStore(store)
 
@@ -24,6 +25,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/accounts" element={<Accounts />} />
             <Route path="/app/:accName" element={
               // <div className="App">
               <OuterContainer />

@@ -1,274 +1,134 @@
-import { Add, ArrowDownward, ArrowForwardIosRounded, AttachMoney, Cancel, Delete, Done, Edit, ExpandMore } from "@mui/icons-material";
-import { Accordion, AccordionDetails, AccordionSummary, Avatar, Box, Button, ButtonBase, ButtonGroup, Card, CardContent, CardHeader, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, Fade, FormLabel, Grid, IconButton, List, ListItem, ListItemButton, Slide, TextField, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { createAccount } from "../Redux/Slices/accountSlice";
+import { ArrowCircleRightOutlined } from "@mui/icons-material";
+import { Box, Grid,  Typography } from "@mui/material";
+import React from "react";
+import { Link } from "react-router-dom";
 import "./Home.css"
-import addAccImg from "../static/addAccount.jpeg"
-import { deleteAccount } from "../Redux/Slices/accountSlice";
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Fade ref={ref} {...props} />;
-  });
-
-
-function stringToColor(string) {
-    let hash = 0;
-    let i;
-  
-    /* eslint-disable no-bitwise */
-    for (i = 0; i < string.length; i += 1) {
-      hash = string.charCodeAt(i) + ((hash << 5) - hash);
-    }
-  
-    let color = '#';
-  
-    for (i = 0; i < 3; i += 1) {
-      const value = (hash >> (i * 8)) & 0xff;
-      color += `00${value.toString(16)}`.slice(-2);
-    }
-    /* eslint-enable no-bitwise */
-  
-    return color;
-  }
-  
-  function stringAvatar(name) {
-    return {
-      sx: {
-        bgcolor: stringToColor(name),
-        width:50, height:50,
-      },
-      children: `${name.split(' ')[0][0]}`,
-    };
-  }
-
-function AccountBlock(props){
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    function handleDelete(e){
-        e.stopPropagation();
-        dispatch(deleteAccount(props.name.split(" ").join("-")));
-    }
-    return (
-        <Box component={ButtonBase} className="block" onClick={()=>navigate(props.link)}>
-            <Avatar {...stringAvatar(props.name)} />
-            <Typography variant="subtitle1" className="accName">{props.name}</Typography>
-            <Delete className="deleteAccBtn" color="error" onClick={handleDelete}/>
-        </Box>
-    )
-}
 
 export default function Home (props){
-    const [open, setOpen] = useState(false)
-    const [add, setAdd] = useState(false);
-    const [newAccName, setNewAccName]=useState("")
-    const dispatch = useDispatch();
-    const [availableAcc, setAvailableAcc] = useState([]);
-    const accounts = useSelector(state=>state.accounts);
-
-    function toggleAdd(){
-        setAdd(!add);
-    }
-    function nameChg(e){
-        setNewAccName(e.target.value);
-    }
-    function addAccount(){
-        if(newAccName.length === 0){
-            alert("Account name can be empty");
-            return;
-        }
-            
-        let accName = newAccName.split(" ").filter(e=>e.length>=1).join("-");
-
-        for(let i=0; i<newAccName.length; i++){
-            let e = newAccName[i];
-            if(!((e>='a' && e<='z') || (e>='A' && e<='Z') || (e>=0 && e<=9) || (e==" "))){
-                alert("Account name can only contain letter and numbers eg: Abc1");
-                return ;
-            }
-        }
-
-        if(accounts[accName]){
-            alert("Account with this name already exists.");
-            return;
-        }
-        dispatch(createAccount(accName));
-        reset();
-    }
-    function reset(){
-        setNewAccName("");
-        toggleAdd();
-    }
-    useEffect(()=>{
-        let arr = []
-        for(let e in accounts){
-            let accName = e;
-            // console.log(e);
-            arr.push(
-                <AccountBlock link={`/app/${accName}`}  name={accName.split('-').join(" ")} key={accName}/>
-            )
-        }
-        setAvailableAcc(arr);
-    }, [accounts])
+    
     return (
         <Box>
-            <div className="styleb1"/>
-            <div className="styleb2"/>
-            <div className="styleb3"/>
-            <div className="styleb4"/>
-            <div className="styleb5"/>
-            <Grid container >
-                <Grid item container xs={12} md={6}>
-                    <Box pt={3} px={2} display="flex" flexDirection="column" >
-                    <Typography className="heading floating" variant="h2">
-                        MANAGE
-                    </Typography>
-                    <FormLabel>
-                        <Typography className="heading" variant="h6" >
-                            ALL YOUR
-                        </Typography>
-                    </FormLabel>
-                    <Typography className="heading floating" variant="h3">EXPENSES</Typography>
-                    <FormLabel>
-                        <Typography className="heading" variant="h6">
-                            <p>AT ONE</p>
-                        </Typography>
-                    </FormLabel>
-                    <Typography className="heading" variant="h4">PLACE</Typography>
-                    </Box>
-                </Grid>
-                <Grid item container xs={12} md={6}>
-                    <Box className="contBlock">
-                        <FormLabel>
-                            <Typography variant="h6">Accounts</Typography>
-                        </FormLabel>
-                        <Box className="extBlock">
-                            <Box component={ButtonBase} className="block" onClick={toggleAdd}>
-                                <Avatar><Typography variant="h3">+</Typography></Avatar>
-                                <Typography variant="h6" className="accName">Add</Typography>
+            <Box className="topBar">
+                <Link to='/accounts' className='accLink'>
+                    <Typography>Go to App</Typography>
+                    <ArrowCircleRightOutlined fontSize="large" sx={{ml:1, mr:3}}/>
+                </Link>
+            </Box>
+            <Box className="headingContainer">
+
+                <Typography className="heading" variant="h3">
+                    Manage all your Expenses
+                </Typography> 
+                <Typography className="heading" variant="h5">
+                    at one place
+                </Typography>
+                
+                <Box mt={5}>
+                    <Typography variant="h6" sx={{mb:2, color:'lightgrey'}} className="heading" >Features</Typography>
+                    <Grid container rowGap={3} justifyContent="center" columnGap={3}>
+                        <Grid item xs={8} md={3}>
+                            <Box className="featureBox">
+                            <Typography variant="h6" className="heading">Manage Expenses</Typography>
+                            <Typography variant="body1"  sx={{mt:1}}>
+                            Keep track of all your expenses and get insights on your expenditure patterns and visualise 
+                            your expenses with graphs and more. 
+                            </Typography>
                             </Box>
+                        </Grid>
+                        <Grid item xs={8} md={3}>
+                            <Box className="featureBox">
+                            <Typography variant="h6" className="heading">Multiple Accounts</Typography>
+                            <Typography variant="body1" sx={{mt:1}}>
+                            Manage more than one accounts without much hastle at same place. Switch between multiple
+                            accounts with just few clicks.
+                            </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={8} md={3}>
+                            <Box className="featureBox">
+                            <Typography variant="h6" className="heading">Analytical Tools</Typography>
+                            <Typography variant="body1" sx={{mt:1}}>
+                            Use various available tools to fillter, sort and group your transaction into categories to 
+                            gain insights and keep track of your transactions.
+                            </Typography>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                    {/* <Pagination sx={{'& .MuiPaginationItem-root':{color:"white"}, "& .MuiPagination-ul":{justifyContent:'center'}}} count={10} page={page} color="primary" onChange={handlePageChange} />        */}
+                </Box>
+            </Box>
+            <Box className="howToUseContainer">
+                <Typography sx={{color:'gray'}} variant="h3" fontWeight={400}>
+                    How to use
+                </Typography> 
+                <Typography sx={{color:'gray'}} variant="h5" fontWeight={400}>
+                    Tips and tricks to use the application
+                </Typography>
 
-                            {/* {
-                                add &&
-                                <Box className="block">
-                                    <TextField placeholder="Enter account name" label="Name" value={newAccName} onChange={nameChg}/>
-                                    <ButtonGroup size="small" variant="text">
-                                        <Button onClick={addAccount}><Done color="success" /></Button>
-                                        <Button onClick={reset}><Cancel color="error"/></Button>
-                                    </ButtonGroup>
-                                </Box>
-                            }   */}
-                            {
-                                availableAcc
-                            }                          
-                        </Box>
-                    </Box>
-                </Grid>
-            </Grid>
-            
-            <Dialog
-            open={add}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={toggleAdd}
-            aria-describedby="alert-dialog-slide-description"
-            >
-                <DialogTitle>Create Account</DialogTitle>
-                <DialogContent>
-                <DialogContentText id="alert-dialog-slide-description">
-                    <TextField sx={{mt:1}} value={newAccName} onChange={nameChg} placeholder="Enter Account Name" label="Name" />
-                </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                <Button onClick={reset}>Disagree</Button>
-                <Button onClick={addAccount}>Agree</Button>
-                </DialogActions>
-            </Dialog>
+                <Box mt={5}>
+                    <Grid container rowGap={3} justifyContent="center" columnGap={3}>
+                        <Grid item xs={8} md={5}>
+                            <Box className="howToBlock">
+                            <Typography variant="h6" >Create Account</Typography>
+                            <Typography variant="body1"  sx={{mt:1}}>
+                            Click on the "Go to App" button on the top right corner and you will be navigated to the accounts page
+                            where you can create and delete accounts. You can create more than one accounts and manage them independently
+                            </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={8} md={5}>
+                            <Box className="howToBlock">
+                            <Typography variant="h6" >Add Transaction</Typography>
+                            <Typography variant="body1" sx={{mt:1}}>
+                            Select the account you want to add transaction into from the list of accounts already created. Then Click on the "Add" 
+                            button to add the transaction select amount, date, category and optional note and click on add.
+                            </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={8} md={5}>
+                            <Box className="howToBlock">
+                            <Typography variant="h6" >Edit Transactions</Typography>
+                            <Typography variant="body1" sx={{mt:1}}>
+                            Select the transaction you want to edit from the list of available transactions present. Then the transaction details will drop
+                            down and then you can click on the edit button to edit the details.
+                            </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={8} md={5}>
+                            <Box className="howToBlock">
+                            <Typography variant="h6" >Sort Transactions</Typography>
+                            <Typography variant="body1" sx={{mt:1}}>
+                            Transactions can be sorted in assending and decending order according to date of the transaction or the transaction amount. To Sort
+                            the transaction open the account on which the desired operation is to be performed and click on sort button and select the desired
+                            parameter.
+                            </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={8} md={5}>
+                            <Box className="howToBlock">
+                            <Typography variant="h6" >Group Transactions</Typography>
+                            <Typography variant="body1" sx={{mt:1}}>
+                            Transactions can be grouped by category, day, month and year. on grouping transaction the sum of transaction is displayed for each group rather 
+                            than individual transactions. Select Group button and apply required group parameter.
+                            </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid item xs={8} md={5}>
+                            <Box className="howToBlock">
+                            <Typography variant="h6" >Filter Transactions</Typography>
+                            <Typography variant="body1" sx={{mt:1}}>
+                            Transactions can be filterd based on various parameters like transaction type(credit/debit), date, amount and category.
+                            To apply filters open the desired account then click on the filter button that will bring up the filter parameters available 
+                            then you can select different parameters according to requirement and only transaction satisfying the criteria will be visible.
+                            </Typography>
+                            </Box>
+                        </Grid>
+                        
+                    </Grid>
+                    {/* <Pagination sx={{'& .MuiPaginationItem-root':{color:"white"}, "& .MuiPagination-ul":{justifyContent:'center'}}} count={10} page={page} color="primary" onChange={handlePageChange} />        */}
+                </Box>
 
-            <Accordion
-            onChange={()=>setOpen(!open)}
-            disableGutters
-            elevation={0}
-            square
-            sx={{
-                boxShadow:"0 0 10px rgba(0, 0, 0, 0.3)",   
-                '&:before':{
-                    display:"none",
-                },
-                position:"fixed",
-                bottom:"0%",
-                width:"100%",
-                zIndex:5,
-                // overflowY:"scroll"
-            }}
-            >
-                <AccordionSummary  expandIcon={<ExpandMore />}
-                sx={{
-                    position:"sticky",
-                    top:0,
-                    backgroundColor:"white",
-                    boxShadow:"0 0 5px rgba(0, 0, 0, 0.6)", 
-
-                }}
-                >
-                    <Typography variant="h6" >Features</Typography>
-                </AccordionSummary>
-            <AccordionDetails sx={{
-                // marginTop:"100%",
-                height:"100vh",
-                overflowY:"scroll"
-            }}>
-                <Card className="cards" sx={{mt:10}}>
-                    <CardHeader title="Add Accounts" subheader="You can add multiple accounts"/>
-                    <CardMedia
-                    component='img'
-                    height={194}
-                    image={addAccImg}
-                    alt="Add multiple accounts"
-                    />
-                    <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                        Use the Add Account button available on the home page to add multiple accounts 
-                        and manage them independently.
-                        </Typography>
-                    </CardContent>
-                </Card>
-                <Card className="cards" >
-                    <CardHeader title="Group Transactions" subheader="Group transactions by date"/>
-                    <CardMedia
-                    component='img'
-                    height={194}
-                    image={addAccImg}
-                    alt="Add multiple accounts"
-                    />
-                    <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                        Click on the Group button to group transactions by day, date, month, year. This will help to 
-                        visualise transactions in a more intutive way.
-                        </Typography>
-                    </CardContent>
-                </Card>
-                <Card className="cards">
-                    <CardHeader title="Filter Transactions" subheader="Filter transactions using prest options"/>
-                    <CardMedia
-                    component='img'
-                    height={194}
-                    image={addAccImg}
-                    alt="Add multiple accounts"
-                    />
-                    <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                        Select filter button for the filter menu where you can set different options to filter transactions 
-                        for more in depth Insight of your transaction history.
-                        </Typography>
-                    </CardContent>
-                </Card>
-            </AccordionDetails>
-            </Accordion>
-
-            {/* </Box> */}
-
+            </Box>
         </Box>
     )
 }

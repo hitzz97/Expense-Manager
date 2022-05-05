@@ -95,14 +95,23 @@
         opacity: 0;
     }
 }
+.headingContainer{
+    padding-top: 15%;
+    padding-bottom: 10%;
+    background-color: #14213d;
+    text-align: center;
+    box-shadow: 0 0 30px #0d48a1e4;
+}
 .heading{
     text-shadow:2px 2px 3px rgba(0,0,0,0.5);
     color: rgb(255, 255, 255);
-    text-shadow: 0 0 4px black;
+    text-shadow: 0 0 px rgb(255, 255, 255);
     font-weight: 400;
+    margin: 10% 5%;
+    animation: appear 2s ease-in-out forwards;
     /* visibility: hidden; */
     /* transform: translateY(20%); */
-    animation: moveUP 2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+    /* animation: moveUP 2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards; */
 }
 @keyframes moveUP {
     0%{
@@ -201,4 +210,65 @@
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
     background-color: azure;
     border-radius: 20px;
+}
+.featureBox{
+    box-shadow: 0 0 0 1px white, 0 0 0 3px black, 0 0 0 5px white, 0 0 8px 5px rgba(255, 255, 255, 0.583);
+    border-radius: 8px;
+    padding: 3%;
+    text-align: center;
+    transition: transform 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    color: rgba(255, 255, 255, 0.79);
+    animation: appear 2s ease-in-out;
+}
+@keyframes appear {
+    0%{
+        opacity: 0;
+        transform: translateY(10%); 
+    }100%{
+        opacity: 1;
+        transform: translateY(0%);
+    }
+    
+}
+.featureBox:hover{
+    z-index: 99;
+    transform: scale(1.1, 1.1) rotate(10deg) !important;
+    background-color: #14213d;
+    box-shadow: 0 0 0 1px white, 0 0 0 3px black, 0 0 0 5px white, 0px 0px 15px white;
+}
+.topBar{
+    position: fixed;
+    top: 0%;
+    z-index: 1000;
+    left: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%;
+    /* border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px; */
+    box-shadow: 0 0 5px black, 0 0 10px white;
+    background-color:rgb(241, 241, 241);
+    width: 100%;
+
+}
+.howToUseContainer{
+    padding-top: 10%;
+    padding-bottom: 5%;
+    /* background-color: #14213d; */
+    text-align: center;
+    /* box-shadow: 0 0 30px #0d48a1e4; */
+}
+.accLink{
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: black;
+}
+.howToBlock{
+    padding:3%;
+    max-width: 400px;
+    /* border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.6); */
 }
