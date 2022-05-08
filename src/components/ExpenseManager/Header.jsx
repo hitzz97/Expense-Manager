@@ -1,6 +1,6 @@
-import { Delete, Edit, Home } from "@mui/icons-material";
+import { Delete} from "@mui/icons-material";
 import {Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { deleteAccount } from "../../Redux/Slices/accountSlice";
@@ -21,26 +21,40 @@ export default function Header(props){
         <Box p={1} mb={1} sx={{
             display:"flex",
             justifyContent:"space-between",
-            backgroundColor:"#4a148c",
+            alignItems:"center",
+            // width:"100%",
+            // backgroundColor:"#4a148c",
             boxShadow:"0 2px 10px rgba(0,0,0,0.6)"
         }}>
-            <Link to="/">
+            <Box sx={{display:"flex"}}>
+            <Link to="/" >
             <Button>
-                <Home color="secondary" />
+                <Typography sx={{color:"black"}} variant="body2">Home</Typography>
             </Button>
             </Link>
+            <Link to="/accounts" >
+            <Button>
+                <Typography sx={{color:"black"}} variant="body2">Accounts</Typography>
+            </Button>
+            </Link>
+            {/* </Box>
+            
             
             <Box sx={{
                 display:"flex", alignItems:"center", justifyItems:"center"
-            }}>
-                <Typography variant="h6" color="whitesmoke">{trans.accName.split("-").join(" ")}</Typography>
+            }}> */}
+            <Button>
+            <Typography variant="body2" color="black">{trans.accName.split("-").join(" ")}</Typography>
+            </Button>
                 {/* <Button sx={{p:0,m:0}} onClick={()=>alert("Functionality yet to be added")}> */}
                 {/* <Edit sx={{ml:0.5}}  variant="small" color="secondary" /> */}
                 {/* </Button> */}
             </Box>
+
             <Button onClick={()=>setShowDelete(true)}>
-                <Delete color="secondary" />
+                <Delete color="black" />
             </Button>
+
             <Dialog
             open={showDelete}
             TransitionComponent={Transition}
@@ -58,7 +72,7 @@ export default function Header(props){
                 <Button onClick={()=>setShowDelete(false)}>Disagree</Button>
                 <Button onClick={()=>{
                     dispatch(deleteAccount(props.accName));
-                    navigate("/");
+                    navigate("/Accounts");
                 }}>Agree</Button>
                 </DialogActions>
             </Dialog>

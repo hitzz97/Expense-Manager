@@ -2,7 +2,7 @@ import { Box, ListItem, ListItemButton,FormLabel, Typography, Button, TextField,
 import "./Transactions.css"
 import { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Edit, ExpandMore } from "@mui/icons-material";
+import { AddCircleOutlined, Edit, ExpandMore } from "@mui/icons-material";
 import AddPopup from "./Popup/AddPopup";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
@@ -271,6 +271,12 @@ export default function Transactions(props){
                             />
                         )
                     })
+                }
+                {visibleTrans.length === 0 && 
+                    <Box sx={{display:"flex", alignItems:"center", flexDirection:"column", color:"gray",mt:5,textAlign:"center"}}>
+                        <AddCircleOutlined sx={{mb:1}} fontSize="large" />
+                        <Typography variant="h6">Select ADD from tools to add Transactions</Typography>
+                    </Box>
                 }
             </Box>
             {/* </ClickAwayListener> */}

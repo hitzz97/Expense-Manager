@@ -1,4 +1,4 @@
-import { Box,ThemeProvider } from "@mui/material";
+import { Box,Grid,ThemeProvider } from "@mui/material";
 import "./OuterContainer.css"
 import Tools from "./Tools"
 import Stats from "./Stats";
@@ -75,12 +75,16 @@ export default function OuterContainer(props){
     return (
         <ThemeProvider theme={theme}>
         <Box className="outerContainer">
-            {/* <Box sx={{position:"sticky", top:0, left:0, zIndex:99,mb:1}}> */}
                 <Header accName={params.accName}/>
+            <Grid container maxWidth={900} mx="auto" justifyContent="center">
+                <Grid item xs={12} md={5} >
                 <Stats accName={params.accName}/>
                 <Tools accName={params.accName}/>
-            {/* </Box> */}
-            <Transactions accName={params.accName}/>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                <Transactions accName={params.accName}/>
+                </Grid>
+            </Grid>
             <Outlet/>
         </Box>
          </ThemeProvider>

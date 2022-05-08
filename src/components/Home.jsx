@@ -1,4 +1,4 @@
-import { ArrowCircleRightOutlined } from "@mui/icons-material";
+import { ArrowCircleRightOutlined, Construction, EmailOutlined, LinkedIn, ManageAccounts, SwitchAccount } from "@mui/icons-material";
 import { Box, Grid,  Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -8,10 +8,10 @@ export default function Home (props){
     
     return (
         <Box>
-            <Box className="topBar">
+            <Box className="topBar" sx={{p:1}}>
                 <Link to='/accounts' className='accLink'>
                     <Typography>Go to App</Typography>
-                    <ArrowCircleRightOutlined fontSize="large" sx={{ml:1, mr:3}}/>
+                    <ArrowCircleRightOutlined fontSize="large" sx={{ml:1, mr:2}}/>
                 </Link>
             </Box>
             <Box className="headingContainer">
@@ -28,6 +28,7 @@ export default function Home (props){
                     <Grid container rowGap={3} justifyContent="center" columnGap={3}>
                         <Grid item xs={8} md={3}>
                             <Box className="featureBox">
+                                <ManageAccounts fontSize="large" />
                             <Typography variant="h6" className="heading">Manage Expenses</Typography>
                             <Typography variant="body1"  sx={{mt:1}}>
                             Keep track of all your expenses and get insights on your expenditure patterns and visualise 
@@ -37,6 +38,7 @@ export default function Home (props){
                         </Grid>
                         <Grid item xs={8} md={3}>
                             <Box className="featureBox">
+                                <SwitchAccount fontSize="large" />
                             <Typography variant="h6" className="heading">Multiple Accounts</Typography>
                             <Typography variant="body1" sx={{mt:1}}>
                             Manage more than one accounts without much hastle at same place. Switch between multiple
@@ -46,6 +48,7 @@ export default function Home (props){
                         </Grid>
                         <Grid item xs={8} md={3}>
                             <Box className="featureBox">
+                                <Construction fontSize="large" />
                             <Typography variant="h6" className="heading">Analytical Tools</Typography>
                             <Typography variant="body1" sx={{mt:1}}>
                             Use various available tools to fillter, sort and group your transaction into categories to 
@@ -128,6 +131,19 @@ export default function Home (props){
                     {/* <Pagination sx={{'& .MuiPaginationItem-root':{color:"white"}, "& .MuiPagination-ul":{justifyContent:'center'}}} count={10} page={page} color="primary" onChange={handlePageChange} />        */}
                 </Box>
 
+            </Box>
+            <Box className="headingContainer">
+                <Typography className="heading" variant="h4">
+                    Contact me
+                </Typography> 
+                <Box sx={{mt:3, color:'white', display:'flex', alignItems:'center', justifyContent:"center"}}>
+                    <EmailOutlined fontSize="large" />
+                    <Typography variant="h6" sx={{my:1, ml:1}}>hitzzkushwaha@gmail.com</Typography>
+                </Box>
+                <Box sx={{ color:'white', display:'flex', alignItems:'center', justifyContent:"center"}}>
+                    <LinkedIn fontSize="large" />
+                    <Typography variant="h6" sx={{my:1, ml:1}}>linkedin.com/in/hitzz97</Typography>
+                </Box>
             </Box>
         </Box>
     )

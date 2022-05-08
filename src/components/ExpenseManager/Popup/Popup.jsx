@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-import { SwipeableDrawer } from "@mui/material";
+import { Box, Grid, SwipeableDrawer } from "@mui/material";
 import { useEffect } from "react";
 
 
@@ -38,15 +38,18 @@ export default function Popup(props) {
             '&.MuiDrawer-modal':{
                 backdropFilter:"blur(2px)",
             },
+            
         }}
         PaperProps={{
             sx:{
                 borderTopRightRadius:'20px',
-                borderTopLeftRadius:'20px'
+                borderTopLeftRadius:'20px',
             }
         }}
         >
+            {/* <Grid item xs={12} md={8}> */}
             {props.children}
+            {/* </Grid> */}
 
         </SwipeableDrawer>
     )

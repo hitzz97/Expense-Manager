@@ -1,0 +1,15 @@
+.accountsContainer{
+    display: flex;
+    flex-direction: column;
+    margin: 5% auto;
+    justify-content: center;
+    align-items: center;
+}
+.accountBlock{
+    /* padding: 5%; */
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    animation: appear 2s ease-in-out;
+
+}
